@@ -6,9 +6,6 @@
   <title>Verificação por SMS - Banco FutureSafe</title>
 
   <style>
-    /* =====================
-       Fundo e layout geral
-    ===================== */
     body {
       margin: 0;
       padding: 0;
@@ -21,7 +18,6 @@
       align-items: center;
     }
 
-    /* Container principal */
     .container {
       background: rgba(0, 0, 0, 0.25);
       padding: 40px;
@@ -35,27 +31,23 @@
       animation: fadeIn 1s ease-in-out;
     }
 
-    /* Animação de entrada */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Título */
     h1 {
       font-size: 1.8em;
       letter-spacing: 1px;
       margin-bottom: 10px;
     }
 
-    /* Descrição */
     .desc {
       color: #aaffdd;
       font-size: 0.9em;
       margin-bottom: 20px;
     }
 
-    /* Input do código */
     #campoCodigo {
       width: 100%;
       padding: 14px;
@@ -74,7 +66,6 @@
       color: rgba(255, 255, 255, 0.4);
     }
 
-    /* Botões */
     .botao {
       width: 100%;
       margin-top: 15px;
@@ -94,7 +85,6 @@
       box-shadow: 0 0 10px #00FF88;
     }
 
-    /* Botão secundário */
     .botao-sec {
       background: transparent;
       color: #00FFAA;
@@ -106,7 +96,6 @@
       background: rgba(0, 255, 170, 0.1);
     }
 
-    /* Mensagens */
     #msg {
       margin-top: 15px;
       font-size: 0.9em;
@@ -114,14 +103,12 @@
       min-height: 20px;
     }
 
-    /* Timer */
     #timer {
       margin-top: 10px;
       font-size: 0.9em;
       color: #00FFAA;
     }
 
-    /* Fake SMS */
     .fake-sms {
       position: fixed;
       top: 20px;
@@ -150,14 +137,12 @@
       color: #888;
     }
 
-    /* Telefone */
     .telefone {
       font-size: 0.85em;
       color: #aaffdd;
       margin-bottom: 12px;
     }
 
-    /* Botão desativado */
     button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
@@ -194,7 +179,7 @@
       return Math.floor(100000 + Math.random() * 900000).toString();
     }
 
-    function salvarOTP(otp, duracao = 30) {
+    function salvarOTP(otp, duracao = 1200) {
       const exp = Date.now() + duracao * 1000;
       localStorage.setItem(OTP_KEY, JSON.stringify({ otp, exp }));
     }
@@ -214,7 +199,7 @@
       const sms = document.getElementById('fakeSms');
       document.getElementById('smsTexto').innerText = "Seu código FutureSafe: " + codigo;
       sms.classList.add('show');
-      setTimeout(() => sms.classList.remove('show'), 4000);
+      setTimeout(() => sms.classList.remove('show'), 15000); // desaparece após 15 segundos
     }
 
     document.getElementById('fecharSms').onclick = () => {
@@ -246,7 +231,7 @@
       salvarOTP(otp, 30);
       document.getElementById('telefoneExib').innerText = "Número: " + (user?.telefone || "(não informado)");
       mostrarSmsFake(otp);
-      iniciarTimer(30);
+      iniciarTimer(90);
       document.getElementById('msg').innerText = "Código enviado!";
       document.getElementById('btnVerificar').disabled = false;
     }
