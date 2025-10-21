@@ -7,6 +7,105 @@
 
   <!-- Importa o estilo global -->
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Fundo futurista escuro com brilho neon */
+    body {
+      background: radial-gradient(circle at center, #0a0a0a 40%, #000000 100%);
+      color: #e0e0e0;
+      font-family: 'Orbitron', sans-serif;
+      text-align: center;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid #00FF88;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 0 25px #00FF88;
+      max-width: 320px;
+      width: 90%;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .slogan {
+      color: #00FF88;
+      text-shadow: 0 0 10px #00FF88;
+      font-size: 1.6em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #b8f7d4;
+      font-size: 0.9em;
+      margin-bottom: 25px;
+    }
+
+    .face {
+      width: 120px;
+      height: 120px;
+      background: rgba(0,255,136,0.15);
+      border: 2px solid #00FF88;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.5em;
+      margin: 25px auto;
+      box-shadow: 0 0 15px rgba(0,255,136,0.4);
+      animation: pulse 1.5s infinite alternate;
+      color: #00FF88;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); box-shadow: 0 0 10px #00FF88; }
+      to { transform: scale(1.1); box-shadow: 0 0 25px #00FF88; }
+    }
+
+    .jewel {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: conic-gradient(#00FF88 0% 25%, #00BFFF 25% 50%, #00FF88 50% 75%, #00BFFF 75% 100%);
+      margin: 25px auto;
+      display: none;
+      animation: spin 1s linear infinite;
+      box-shadow: 0 0 25px rgba(0,255,136,0.4);
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .btn-acessar {
+      background: #00FF88;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 25px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1em;
+      box-shadow: 0 0 10px #00FF88;
+      transition: 0.3s;
+    }
+
+    .btn-acessar:hover {
+      background: #00cc6a;
+      box-shadow: 0 0 20px #00FF88;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -21,60 +120,23 @@
 
   <script>
     const btn = document.getElementById("btnVerify");
-    const container = document.querySelector(".container");
-
-    // Cria o rosto e a joia dinamicamente
     const face = document.querySelector(".face");
     const jewel = document.querySelector(".jewel");
 
-    // Cria animações no estilo do seu tema
-    const style = document.createElement("style");
-    style.innerHTML = `
-      .face {
-        width: 120px;
-        height: 120px;
-        background: rgba(0,255,136,0.3);
-        border: 2px solid #00FF88;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 2em;
-        margin: 25px auto;
-        box-shadow: 0 0 15px rgba(0,255,136,0.4);
-        animation: pulse 1.5s infinite alternate;
-      }
-
-      @keyframes pulse {
-        from { transform: scale(1); box-shadow: 0 0 10px #00FF88; }
-        to { transform: scale(1.1); box-shadow: 0 0 25px #00FF88; }
-      }
-
-      .jewel {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background: conic-gradient(#00FF88 0% 25%, #00BFFF 25% 50%, #00FF88 50% 75%, #00BFFF 75% 100%);
-        margin: 20px auto;
-        display: none;
-        animation: spin 1s linear infinite;
-        box-shadow: 0 0 25px rgba(0,255,136,0.4);
-      }
-
-      @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-    `;
-    document.head.appendChild(style);
-
     btn.addEventListener("click", () => {
       btn.disabled = true;
-      face.textContent = "⌛"; // Mostra "carregando"
+      btn.textContent = "Verificando...";
+      face.textContent = "⌛";
+
       setTimeout(() => {
         face.style.display = "none";
         jewel.style.display = "block";
-      }, 3000); // após 3s mostra a joia
+      }, 3000); // Mostra a joia após 3s
+
+      // Após 6 segundos, redireciona para o index3.html
+      setTimeout(() => {
+        window.location.href = "index3.html";
+      }, 6000);
     });
   </script>
 </body>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Banco Seguro - Login / Cadastro</title>
+<title>Banco Seguro - First Bank</title>
 <link rel="stylesheet" href="style.css">
 
 <style>
@@ -27,6 +27,7 @@
     letter-spacing: 4px;
     font-family: sans-serif;
     animation: brilho 2s infinite alternate;
+    text-align: center;
   }
 
   /* Linha de luz passando pelo texto */
@@ -60,10 +61,23 @@
     100% { opacity:0; visibility:hidden; }
   }
 
-  /* ---------- Container principal (escondido até splash sumir) ---------- */
-  .container { display:none; text-align:center; padding:20px; }
+  /* ---------- Container principal ---------- */
+  body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: radial-gradient(circle at top, #001911, #000);
+    color: #fff;
+  }
 
-  /* ---------- Logo menor no login ---------- */
+  .container { 
+    display:none; 
+    text-align:center; 
+    padding:20px; 
+    max-width:400px;
+    margin: auto;
+  }
+
+  /* ---------- Logo e título ---------- */
   .logo-banco {
     width: 100px;
     height: 100px;
@@ -74,26 +88,177 @@
     animation: brilho 2s infinite alternate;
   }
 
+  h2 {
+    color:#00FF88;
+    font-weight:600;
+    margin-bottom:20px;
+    text-shadow:0 0 10px #00FF88;
+  }
+
   /* ---------- Alternar login/cadastro ---------- */ 
-  .switcher { display:flex; gap:8px; justify-content:center; margin-bottom: 10px; } 
-  .switcher button { padding:8px 14px; border-radius:20px; border:none; cursor:pointer; font-weight:bold; transition:0.3s; } 
-  .switcher .ativo { background:#004d63; color:#fff; } 
+  .switcher { 
+    display:flex; 
+    gap:8px; 
+    justify-content:center; 
+    margin-bottom: 10px; 
+  } 
+  .switcher button { 
+    padding:8px 14px; 
+    border-radius:20px; 
+    border:none; 
+    cursor:pointer; 
+    font-weight:bold; 
+    background:#003b2e; 
+    color:#00FF88;
+    transition:0.3s; 
+  } 
+  .switcher .ativo { 
+    background:#00FF88; 
+    color:#000; 
+    box-shadow:0 0 10px #00FF88;
+  } 
+
+  /* ---------- Campos e botões ---------- */
   .formulario { display:none; } 
   .formulario.ativo { display:block; } 
-  .mensagem-caixa { margin-top:12px; padding:10px 14px; border-radius:10px; display:inline-block; min-width:250px; transition:0.3s; }
+
+  .input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    background: rgba(0, 255, 136, 0.08);
+    border-radius: 12px;
+    padding: 10px 14px;
+    border: 1px solid rgba(0,255,136,0.25);
+  }
+
+  .input-group .icon {
+    margin-right: 10px;
+    font-size: 1.2rem;
+  }
+
+  .input-group input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 1rem;
+  }
+
+  .btn-acessar {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #00ff88, #007755);
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 8px;
+  }
+
+  .btn-acessar:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 15px #00ff88;
+  }
+
+  .mensagem-caixa { 
+    margin-top:12px; 
+    padding:10px 14px; 
+    border-radius:10px; 
+    display:inline-block; 
+    min-width:250px; 
+    transition:0.3s; 
+  }
+
+  a.button {
+    display: inline-block;
+    color: #00FF88;
+    margin-top: 16px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+  }
+
+  a.button:hover {
+    color: #fff;
+    text-shadow: 0 0 8px #00FF88;
+  }
+
+  /* ---------- RESPONSIVIDADE ---------- */
+  @media (max-width: 768px) {
+    #splash h1 {
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
+
+    .container {
+      padding: 15px;
+      width: 90%;
+    }
+
+    .logo-banco {
+      width: 80px;
+      height: 80px;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+    }
+
+    .switcher {
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .switcher button {
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    .btn-acessar {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+    }
+
+    .mensagem-caixa {
+      width: 100%;
+      font-size: 0.9rem;
+      word-wrap: break-word;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #splash h1 {
+      font-size: 1.5rem;
+    }
+
+    .logo-banco {
+      width: 70px;
+      height: 70px;
+    }
+
+    .btn-acessar {
+      font-size: 0.9rem;
+      padding: 10px;
+    }
+  }
 </style>
 </head>
 
 <body>
   <!-- ---------- Splash Screen ---------- -->
   <div id="splash">
-    <h1>BANCOSEGURO</h1>
+    <h1>First Bank</h1>
   </div>
 
   <!-- ---------- Container principal ---------- -->
   <div class="container">
     <img src="logo.png" alt="Logo Banco Seguro" class="logo-banco">
-    <h2>Banco Seguro</h2>
+    <h2>First Bank</h2>
 
     <div class="switcher">
       <button id="btn-login" class="ativo" onclick="mostrar('login')">Entrar</button>
@@ -142,7 +307,7 @@
       <div id="mensagemCadastro" class="mensagem-caixa" style="display:none;"></div>
     </div>
 
-    <a href="#" class="button" style="margin-top:16px;">saiba mais.</a>
+    <a href="#" class="button">saiba mais.</a>
   </div>
 
 <script>

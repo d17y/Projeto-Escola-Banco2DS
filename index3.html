@@ -1,149 +1,117 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Banco Digital - Futurista</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #000000, #00FF88);
-      color: white;
-    }
-
-    .app {
-      background: rgba(0, 0, 0, 0.25);
-      backdrop-filter: blur(12px);
-      width: 350px;
-      border-radius: 24px;
-      padding: 30px 25px;
-      text-align: center;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-    }
-
-    .saldo-label {
-      font-size: 14px;
-      opacity: 0.7;
-      letter-spacing: 1px;
-    }
-
-    .saldo {
-      font-size: 36px;
-      font-weight: bold;
-      margin: 10px 0 30px;
-      color: #00FF88;
-      text-shadow: 0 0 8px #00FF88;
-    }
-
-    .btn-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-    }
-
-    .btn {
-      width: 90px;
-      height: 90px;
-      border-radius: 20px;
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 2px solid #00FF88;
-      color: white;
-      font-weight: bold;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-    }
-
-    .btn:hover {
-      background-color: rgba(0, 255, 136, 0.2);
-      transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(0, 255, 136, 0.5);
-    }
-
-    .btn img {
-      width: 28px;
-      height: 28px;
-      margin-bottom: 8px;
-    }
-
-    .info {
-      font-size: 13px;
-      margin-top: 25px;
-      opacity: 0.85;
-      line-height: 1.5;
-      color: #dff6ff;
-    }
-
-    .info span {
-      font-weight: bold;
-      color: #00FF88;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>First Bank x Educa Finance</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Poppins', sans-serif;
+  height:100vh;
+  background: linear-gradient(135deg,#000,#002d1f 60%,#00ff88 150%);
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+.app {
+  position:relative;
+  background: rgba(255,255,255,0.05);
+  border:1px solid rgba(0,255,136,0.2);
+  backdrop-filter: blur(18px);
+  border-radius:24px;
+  padding:40px 30px;
+  width:370px;
+  box-shadow:0 0 25px rgba(0,255,136,0.2);
+  text-align:center;
+}
+.brand { font-size:1.8em; font-weight:700; color:#00ff88; text-shadow:0 0 12px #00ff88; letter-spacing:1px; }
+.slogan { margin-top:6px; font-size:0.9em; color:#b3ffe2; opacity:0.9; }
+.slogan strong { color:#00ff88; }
+.saldo-card { margin:30px 0; padding:25px; border-radius:18px; background: rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.2); box-shadow: inset 0 0 20px rgba(0,255,136,0.08);}
+.saldo-label { font-size:13px; opacity:0.7; letter-spacing:1px; }
+.saldo-row { display:flex; justify-content:center; align-items:center; gap:8px; margin-top:10px; }
+.saldo { font-size:36px; font-weight:600; color:#00ff88; text-shadow:0 0 10px #00ff88; transition: opacity 0.3s ease; }
+.eye-btn { background:none; border:none; cursor:pointer; padding:5px; transition:0.3s ease; }
+.eye-btn img { width:26px; height:26px; filter: drop-shadow(0 0 5px #00ff88); opacity:0.8; transition:0.2s ease; }
+.eye-btn:hover img { opacity:1; transform:scale(1.1); }
+.btn-container { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin-bottom:30px; }
+.btn { background: rgba(255,255,255,0.06); border:1px solid rgba(0,255,136,0.3); border-radius:16px;
+  padding:18px 10px; color:#fff; font-weight:600; font-size:0.9em; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; cursor:pointer; text-decoration:none; transition:0.3s ease; box-shadow:0 0 8px rgba(0,255,136,0.1);}
+.btn:hover { background: rgba(0,255,136,0.15); box-shadow:0 0 20px rgba(0,255,136,0.4); transform:translateY(-4px);}
+.btn img { width:28px; margin-bottom:8px; filter: drop-shadow(0 0 4px #00ff88);}
+.footer { margin-top:28px; font-size:0.8em; color:#00ff88; opacity:0.8; text-shadow:0 0 6px #00ff88; }
+.glow { position:absolute; width:250px; height:250px; border-radius:50%; background: radial-gradient(circle, rgba(0,255,136,0.25), transparent 70%); filter: blur(60px); animation: float 6s ease-in-out infinite alternate; }
+.glow:nth-child(1) { top:-100px; left:-80px; }
+.glow:nth-child(2) { bottom:-80px; right:-60px; background: radial-gradient(circle, rgba(0,191,255,0.25), transparent 70%); animation-delay:2s; }
+@keyframes float { from{transform:translateY(0);} to{transform:translateY(20px);} }
+</style>
 </head>
 <body>
 
+<div class="glow"></div>
+<div class="glow"></div>
+
 <div class="app">
-  <div class="saldo-label">SALDO</div>
-  <div class="saldo" id="saldo">R$ 450,99</div>
+  <div class="brand">First Bank</div>
+  <div class="slogan">
+    Em parceria com <strong>Educa Finance</strong><br>
+    <small>Conquiste suas metas financeiras com autonomia e propósito.</small>
+  </div>
+
+  <div class="saldo-card">
+    <div class="saldo-label">Saldo disponível</div>
+    <div class="saldo-row">
+      <span class="saldo" id="saldo">R$ 450,99</span>
+      <button class="eye-btn" id="toggleSaldo">
+        <img id="eyeIcon" src="https://img.icons8.com/ios-filled/50/ffffff/visible.png" alt="Mostrar/Ocultar saldo">
+      </button>
+    </div>
+  </div>
 
   <div class="btn-container">
-    <a class="btn" href="pix.html">
-      <img src="https://img.icons8.com/ios-filled/50/ffffff/money-transfer.png" alt="Pix">
-      PIX
-    </a>
-    <a class="btn" href="invest.html">
-      <img src="https://img.icons8.com/ios-filled/50/ffffff/investment.png" alt="Investir">
-      INVEST
-    </a>
-    <a class="btn" href="recarga.html">
-      <img src="https://img.icons8.com/ios-filled/50/ffffff/phone.png" alt="Recarga">
-      RECARGA
-    </a>
+    <a href="pix.html" class="btn"><img src="https://img.icons8.com/ios-filled/50/ffffff/money-transfer.png" alt="Pix">PIX</a>
+    <a href="recarga.html" class="btn"><img src="https://img.icons8.com/ios-filled/50/ffffff/phone.png" alt="Recarga">RECARGA</a>
+    <a href="educa.html" class="btn"><img src="https://img.icons8.com/ios-filled/50/ffffff/goal.png" alt="Educa">EDUCA+</a>
+    <a href="ajuda.html" class="btn"><img src="https://img.icons8.com/ios-filled/50/ffffff/help.png" alt="Ajuda">SUPORTE</a>
   </div>
 
-  <div class="info" id="infoUser">
-    CPF: <span id="cpf">-</span> <br>
-    Tel: <span id="tel">-</span> <br>
-    Verificado: <span id="verificado">-</span>
-  </div>
+  <div class="footer">© 2025 FutureSafe • Em parceria com Educa Finance</div>
 </div>
 
 <script>
-  const cpf = localStorage.getItem('ultimo_cpf_logado') || '123.456.789-10';
-  const usersRaw = localStorage.getItem('banco_usuarios') || '{}';
-  const users = JSON.parse(usersRaw);
+const saldoEl = document.getElementById('saldo');
+const toggleBtn = document.getElementById('toggleSaldo');
+const eyeIcon = document.getElementById('eyeIcon');
 
-  if (!users[cpf]) {
-    users[cpf] = {
-      telefone: '11999999999',
-      saldo: 450.99,
-      verificado: true
-    };
-    localStorage.setItem('banco_usuarios', JSON.stringify(users));
+let saldoVisivel = true;
+let saldoValor = 450.99;
+
+// Inicializa saldo
+saldoEl.innerText = `R$ ${saldoValor.toFixed(2)}`;
+
+// Função do olho
+toggleBtn.addEventListener('click', () => {
+  saldoVisivel = !saldoVisivel;
+  if (saldoVisivel) {
+    eyeIcon.src = "https://img.icons8.com/ios-filled/50/ffffff/visible.png";
+    saldoEl.style.opacity = 0;
+    setTimeout(() => {
+      saldoEl.innerText = `R$ ${saldoValor.toFixed(2)}`;
+      saldoEl.style.opacity = 1;
+    }, 150);
+  } else {
+    eyeIcon.src = "https://img.icons8.com/ios-filled/50/ffffff/invisible.png";
+    saldoEl.style.opacity = 0;
+    setTimeout(() => {
+      saldoEl.innerText = "R$ ●●●●●●";
+      saldoEl.style.opacity = 1;
+    }, 150);
   }
-
-  const user = users[cpf];
-
-  // Atualiza UI
-  document.getElementById('saldo').innerText = 'R$ ' + user.saldo.toFixed(2);
-  document.getElementById('cpf').innerText = cpf;
-  document.getElementById('tel').innerText = user.telefone;
-  document.getElementById('verificado').innerText = user.verificado ? 'Sim ✅' : 'Não ❌';
+});
 </script>
 
 </body>

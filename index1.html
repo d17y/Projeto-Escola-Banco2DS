@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Verificação por SMS - Banco FutureSafe</title>
+  <title>First Bank</title>
 
   <style>
     body {
@@ -125,6 +125,7 @@
       text-align: left;
       font-size: 0.9em;
       backdrop-filter: blur(6px);
+      z-index: 1000;
     }
 
     .fake-sms.show {
@@ -146,6 +147,73 @@
     button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
+    }
+
+    /* =====================
+       🔹 RESPONSIVIDADE 🔹
+    ===================== */
+    @media (max-width: 768px) {
+      body {
+        padding: 20px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 350px;
+        padding: 25px;
+        border-radius: 20px;
+      }
+
+      h1 {
+        font-size: 1.6em;
+      }
+
+      .desc {
+        font-size: 0.85em;
+      }
+
+      #campoCodigo {
+        font-size: 1em;
+        padding: 12px;
+      }
+
+      .botao {
+        font-size: 0.95em;
+        padding: 10px;
+      }
+
+      .botao-sec {
+        font-size: 0.9em;
+      }
+
+      .fake-sms {
+        width: 90%;
+        font-size: 0.85em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.4em;
+      }
+
+      .container {
+        padding: 20px;
+        border-radius: 18px;
+      }
+
+      #campoCodigo {
+        font-size: 1em;
+      }
+
+      .botao {
+        font-size: 0.9em;
+      }
+
+      .fake-sms {
+        font-size: 0.8em;
+        max-width: 280px;
+      }
     }
   </style>
 </head>
@@ -199,7 +267,7 @@
       const sms = document.getElementById('fakeSms');
       document.getElementById('smsTexto').innerText = "Seu código FutureSafe: " + codigo;
       sms.classList.add('show');
-      setTimeout(() => sms.classList.remove('show'), 15000); // desaparece após 15 segundos
+      setTimeout(() => sms.classList.remove('show'), 15000); // desaparece após 15s
     }
 
     document.getElementById('fecharSms').onclick = () => {
