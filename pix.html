@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PIX - First Bank</title>
+<style>
+* {margin:0; padding:0; box-sizing:border-box;}
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg,#000,#002d1f 60%,#00ff88 150%);
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:20px;
+}
+.app {
+  position:relative;
+  background: rgba(255,255,255,0.05);
+  border:1px solid rgba(0,255,136,0.2);
+  backdrop-filter: blur(18px);
+  border-radius:24px;
+  padding:40px 30px;
+  width:370px;
+  max-width:100%;
+  box-shadow:0 0 25px rgba(0,255,136,0.2);
+  text-align:center;
+}
+h1 {color:#00ff88; margin-bottom:20px; text-shadow:0 0 10px #00ff88;}
+input {width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,255,136,0.2); background:rgba(0,255,136,0.04); color:#fff; margin-bottom:12px;}
+button {padding:12px; border:none; border-radius:16px; background:linear-gradient(90deg,#00ff88,#007755); color:#000; font-weight:600; cursor:pointer; width:100%; margin-bottom:12px;}
+.back-btn {background:none; border:1px solid rgba(0,255,136,0.2); color:#00ff88; border-radius:12px; padding:8px 12px; cursor:pointer; margin-bottom:20px;}
+.ultimos {margin-top:20px; text-align:left;}
+.ultimos h2 {color:#00ff88; margin-bottom:10px; text-shadow:0 0 6px #00ff88;}
+.pix-list {display:flex; flex-direction:column; gap:10px;}
+.pix-item {background:rgba(0,255,136,0.04); padding:10px; border-radius:12px; border:1px solid rgba(0,255,136,0.12);}
+.pix-row {display:flex; justify-content:space-between;}
+.pix-desc {font-size:0.85rem; color:#bfffd6; margin-top:4px;}
+.warning {font-size:0.85rem; color:#ffd9d9; margin-bottom:8px; display:none;}
+@media(max-width:480px){.app{padding:28px 20px;} h1{font-size:1.4rem;}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <button class="back-btn" onclick="window.location.href='index3.html'">← Voltar</button>
+  <h1>PIX / Transferência</h1>
+
+  <div class="warning" id="msg"></div>
+
+  <input type="text" id="dest" placeholder="Destinatário (Ex: Lanchonete)">
+  <input type="number" id="valor" placeholder="Valor R$" step="0.01" min="0">
+  <button id="btnTransferir">Enviar PIX</button>
+
+  <div class="ultimos">
+    <h2>Últimos PIX</h2>
+    <div class="pix-list" id="lista"></div>
+  </div>
+</div>
+
+<script>
+const destEl = document.getElementById('dest');
+const valorEl = document.getElementById('valor');
+const btn = document.getElementById('btnTransferir');
+const listaEl = document.getElementById('lista');
+const msgEl = document.getElementById('msg');
+
+// Inicializa saldo e histórico
+if (!localStorage.getItem('saldo_valor')) localStorage.setItem('saldo_valor', JSON.stringify(450.99));
+let ultimosPix = JSON.parse(localStorage.getItem('ultimosPix') || '[]');
+if (ultimosPix.length === 0){
+  ultimosPix = [
+    {dest:'Lanchonete', valor:24.50, desc:'Almoço', data:new Date().toISOString()},
+    {dest:'Uber', valor:18.75, desc:'Corrida', data:new Date().toISOString()},
+    {dest:'Supermercado', valor:150.00, desc:'Compras', data:new Date().toISOString()}
+  ];
+  localStorage.setItem('ultimosPix', JSON.stringify(ultimosPix));
+}
+
+function formatBRL(n){ return n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+
+function renderLista(){
+  listaEl.innerHTML = '';
+  ultimosPix.slice(-3).reverse().forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'pix-item';
+    div.innerHTML = `<div class="pix-row"><strong style="color:#dfffe0">${p.dest}</strong><strong style="color:#00ff88">${formatBRL(p.valor)}</strong></div>
+                     <div class="pix-desc">${p.desc}</div>`;
+    listaEl.appendChild(div);
+  });
+}
+
+function getSaldo(){ return parseFloat(JSON.parse(localStorage.getItem('saldo_valor') || '0')); }
+function setSaldo(v){ localStorage.setItem('saldo_valor', JSON.stringify(v)); }
+
+btn.addEventListener('click', ()=>{
+  msgEl.style.display = 'none';
+  const dest = destEl.value.trim();
+  const valor = parseFloat(valorEl.value);
+
+  if(!dest || isNaN(valor) || valor <=0){
+    msgEl.textContent = 'Preencha destinatário e valor válidos.';
+    msgEl.style.display = 'block';
+    return;
+  }
+
+  const saldoAtual = getSaldo();
+  if(valor > saldoAtual){
+    msgEl.textContent = 'Saldo insuficiente.';
+    msgEl.style.display = 'block';
+    return;
+  }
+
+  // Deduz saldo e atualiza histórico
+  setSaldo(Number((saldoAtual - valor).toFixed(2)));
+  ultimosPix.push({dest, valor:Number(valor.toFixed(2)), desc:'Transferência enviada', data:new Date().toISOString()});
+  localStorage.setItem('ultimosPix', JSON.stringify(ultimosPix));
+
+  renderLista();
+  destEl.value=''; valorEl.value='';
+  msgEl.style.color='#bfffd6';
+  msgEl.textContent = `PIX de ${formatBRL(valor)} enviado! Novo saldo: ${formatBRL(getSaldo())}`;
+  msgEl.style.display='block';
+  // dispara storage event para index3.html atualizar automaticamente
+  localStorage.setItem('saldo_updated_at', Date.now());
+});
+
+// Inicializa lista
+renderLista();
+</script>
+
+</body>
+</html>

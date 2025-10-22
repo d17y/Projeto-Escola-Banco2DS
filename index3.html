@@ -90,24 +90,14 @@ body {
 
 /* ========= RESPONSIVIDADE ========= */
 @media (max-width: 480px) {
-  .app {
-    padding: 28px 20px;
-    width: 100%;
-  }
-  .logo {
-    width: 70px;
-  }
+  .app { padding: 28px 20px; width: 100%; }
+  .logo { width: 70px; }
   .saldo { font-size: 28px; }
-  .btn-container {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
+  .btn-container { grid-template-columns: 1fr; gap: 14px; }
   .btn img { width: 24px; }
   .footer { font-size: 0.7em; }
 }
-@media (min-width: 768px) {
-  .app { width: 420px; }
-}
+@media (min-width: 768px) { .app { width: 420px; } }
 </style>
 </head>
 <body>
@@ -117,14 +107,12 @@ body {
 
 <div class="app">
   <img src="logo.png" alt="Logo FutureSafe" class="logo">
-  <div class="slogan">
-   Banco Seguro --- 2025
-  </div>
+  <div class="slogan">Banco Seguro --- 2025</div>
 
   <div class="saldo-card">
     <div class="saldo-label">Saldo disponível</div>
     <div class="saldo-row">
-      <span class="saldo" id="saldo">R$ 450,99</span>
+      <span class="saldo" id="saldo"></span>
       <button class="eye-btn" id="toggleSaldo">
         <img id="eyeIcon" src="https://img.icons8.com/ios-filled/50/ffffff/visible.png" alt="Mostrar/Ocultar saldo">
       </button>
@@ -147,28 +135,37 @@ const toggleBtn = document.getElementById('toggleSaldo');
 const eyeIcon = document.getElementById('eyeIcon');
 
 let saldoVisivel = true;
-let saldoValor = 450.99;
 
-// Inicializa saldo
-saldoEl.innerText = `R$ ${saldoValor.toFixed(2)}`;
+// Inicializa saldo do localStorage
+if (!localStorage.getItem('saldo_valor')) localStorage.setItem('saldo_valor', JSON.stringify(450.99));
+let saldoValor = parseFloat(JSON.parse(localStorage.getItem('saldo_valor')));
+
+// Função para atualizar visualmente o saldo
+function atualizarSaldo(valor) {
+  saldoEl.style.opacity = 0;
+  setTimeout(() => {
+    saldoEl.innerText = saldoVisivel ? `R$ ${valor.toFixed(2)}` : 'R$ ●●●●●●';
+    saldoEl.style.opacity = 1;
+  }, 150);
+}
+
+// Inicializa
+atualizarSaldo(saldoValor);
 
 // Função do olho
 toggleBtn.addEventListener('click', () => {
   saldoVisivel = !saldoVisivel;
-  if (saldoVisivel) {
-    eyeIcon.src = "https://img.icons8.com/ios-filled/50/ffffff/visible.png";
-    saldoEl.style.opacity = 0;
-    setTimeout(() => {
-      saldoEl.innerText = `R$ ${saldoValor.toFixed(2)}`;
-      saldoEl.style.opacity = 1;
-    }, 150);
-  } else {
-    eyeIcon.src = "https://img.icons8.com/ios-filled/50/ffffff/invisible.png";
-    saldoEl.style.opacity = 0;
-    setTimeout(() => {
-      saldoEl.innerText = "R$ ●●●●●●";
-      saldoEl.style.opacity = 1;
-    }, 150);
+  atualizarSaldo(saldoValor);
+  eyeIcon.src = saldoVisivel 
+    ? "https://img.icons8.com/ios-filled/50/ffffff/visible.png"
+    : "https://img.icons8.com/ios-filled/50/ffffff/invisible.png";
+});
+
+// Escuta mudanças de saldo do PIX
+window.addEventListener('storage', (e) => {
+  if(e.key === 'saldo_updated_at'){
+    saldoValor = parseFloat(JSON.parse(localStorage.getItem('saldo_valor')));
+    atualizarSaldo(saldoValor);
   }
 });
 </script>
