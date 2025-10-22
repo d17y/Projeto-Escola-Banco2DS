@@ -4,305 +4,274 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Banco Seguro - First Bank</title>
-<link rel="stylesheet" href="style.css">
 
 <style>
-  /* ---------- Splash Screen com linha de luz ---------- */
-  #splash {
-    position: fixed;
-    top:0; left:0; width:100%; height:100%;
-    background: linear-gradient(135deg, #000000, #003b2e, #1b4b35);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:9999;
-    overflow:hidden;
-  }
+* { margin:0; padding:0; box-sizing:border-box; }
 
-  #splash h1 {
-    font-size:3rem;
-    color:#00FF88;
-    position: relative;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    font-family: sans-serif;
-    animation: brilho 2s infinite alternate;
-    text-align: center;
-  }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle at top, #001911, #000);
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
 
-  /* Linha de luz passando pelo texto */
-  #splash h1::after {
-    content:'';
-    position:absolute;
-    top:0; left:-50%;
-    width:50%; height:100%;
-    background: linear-gradient(120deg, rgba(255,255,255,0.0) 0%, rgba(255, 255, 255, 0.774) 50%, rgba(255,255,255,0.0) 100%);
-    transform: skewX(-25deg);
-    animation: slide 2s forwards;
-  }
+/* ---------- Splash Screen ---------- */
+#splash {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: linear-gradient(135deg, #000000, #003b2e, #1b4b35);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  overflow:hidden;
+}
 
-  @keyframes slide {
-    0% { left:-50%; }
-    100% { left:150%; }
-  }
+#splash h1 {
+  font-size:3rem;
+  color:#00FF88;
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-family: 'Poppins', sans-serif;
+  animation: brilho 2s infinite alternate;
+  text-align: center;
+}
 
-  @keyframes brilho {
-    0% { text-shadow: 0 0 6px #00FF88; }
-    100% { text-shadow: 0 0 25px #00FF88; }
-  }
+/* Linha de luz animada */
+#splash h1::after {
+  content:'';
+  position:absolute;
+  top:0; left:-50%;
+  width:50%; height:100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0.0) 100%);
+  transform: skewX(-25deg);
+  animation: slide 2s forwards;
+}
 
-  /* Fade out da splash */
-  .fade-out {
-    animation: fadeOut 1s forwards;
-  }
+@keyframes slide {
+  0% { left:-50%; }
+  100% { left:150%; }
+}
 
-  @keyframes fadeOut {
-    0% { opacity:1; }
-    100% { opacity:0; visibility:hidden; }
-  }
+@keyframes brilho {
+  0% { text-shadow: 0 0 6px #00FF88; }
+  100% { text-shadow: 0 0 25px #00FF88; }
+}
 
-  /* ---------- Container principal ---------- */
-  body {
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    background: radial-gradient(circle at top, #001911, #000);
-    color: #fff;
-  }
+/* Fade out */
+.fade-out {
+  animation: fadeOut 1s forwards;
+}
+@keyframes fadeOut {
+  0% { opacity:1; }
+  100% { opacity:0; visibility:hidden; }
+}
 
-  .container { 
-    display:none; 
-    text-align:center; 
-    padding:20px; 
-    max-width:400px;
-    margin: auto;
-  }
+/* ---------- Container ---------- */
+.container {
+  display:none;
+  text-align:center;
+  padding: 30px 20px;
+  max-width:400px;
+  width:90%;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(0,255,136,0.25);
+  border-radius:20px;
+  box-shadow: 0 0 20px rgba(0,255,136,0.1);
+  backdrop-filter: blur(8px);
+}
 
-  /* ---------- Logo e título ---------- */
-  .logo-banco {
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
-    display: block;
-    margin: 0 auto 10px auto;
-    filter: drop-shadow(0 0 10px #00FF88);
-    animation: brilho 2s infinite alternate;
-  }
+/* ---------- Logo e título ---------- */
+.logo-banco {
+  width: 250px;
+  height: 200px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 10px auto;
+  filter: drop-shadow(0 0 10px #00FF88);
+  animation: brilho 2s infinite alternate;
+}
 
-  h2 {
-    color:#00FF88;
-    font-weight:600;
-    margin-bottom:20px;
-    text-shadow:0 0 10px #00FF88;
-  }
+h2 {
+  color:#00FF88;
+  font-weight:600;
+  margin-bottom:20px;
+  text-shadow:0 0 10px #00FF88;
+}
 
-  /* ---------- Alternar login/cadastro ---------- */ 
-  .switcher { 
-    display:flex; 
-    gap:8px; 
-    justify-content:center; 
-    margin-bottom: 10px; 
-  } 
-  .switcher button { 
-    padding:8px 14px; 
-    border-radius:20px; 
-    border:none; 
-    cursor:pointer; 
-    font-weight:bold; 
-    background:#003b2e; 
-    color:#00FF88;
-    transition:0.3s; 
-  } 
-  .switcher .ativo { 
-    background:#00FF88; 
-    color:#000; 
-    box-shadow:0 0 10px #00FF88;
-  } 
+/* ---------- Alternar login/cadastro ---------- */ 
+.switcher {
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.switcher button {
+  padding:10px 16px;
+  border-radius:20px;
+  border:none;
+  cursor:pointer;
+  font-weight:bold;
+  background:#003b2e;
+  color:#00FF88;
+  transition:0.3s;
+  flex: 1;
+  min-width: 120px;
+}
+.switcher .ativo {
+  background:#00FF88;
+  color:#000;
+  box-shadow:0 0 10px #00FF88;
+}
 
-  /* ---------- Campos e botões ---------- */
-  .formulario { display:none; } 
-  .formulario.ativo { display:block; } 
+/* ---------- Formulários ---------- */
+.formulario { display:none; }
+.formulario.ativo { display:block; }
 
-  .input-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
-    background: rgba(0, 255, 136, 0.08);
-    border-radius: 12px;
-    padding: 10px 14px;
-    border: 1px solid rgba(0,255,136,0.25);
-  }
+.input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  background: rgba(0,255,136,0.08);
+  border-radius: 12px;
+  padding: 10px 14px;
+  border: 1px solid rgba(0,255,136,0.25);
+}
+.input-group .icon {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+.input-group input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 1rem;
+}
 
-  .input-group .icon {
-    margin-right: 10px;
-    font-size: 1.2rem;
-  }
+.btn-acessar {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #00ff88, #007755);
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 8px;
+}
+.btn-acessar:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 15px #00ff88;
+}
 
-  .input-group input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #fff;
-    font-size: 1rem;
-  }
+.mensagem-caixa { 
+  margin-top:12px; 
+  padding:10px 14px; 
+  border-radius:10px; 
+  display:inline-block; 
+  min-width:250px; 
+  transition:0.3s; 
+}
 
-  .btn-acessar {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 20px;
-    background: linear-gradient(90deg, #00ff88, #007755);
-    color: #000;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-    margin-top: 8px;
-  }
+a.button {
+  display: inline-block;
+  color: #00FF88;
+  margin-top: 16px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+a.button:hover {
+  color: #fff;
+  text-shadow: 0 0 8px #00FF88;
+}
 
-  .btn-acessar:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 15px #00ff88;
-  }
+/* ---------- RESPONSIVIDADE ---------- */
+@media (max-width: 768px) {
+  #splash h1 { font-size: 2.3rem; letter-spacing: 3px; }
+  .container { max-width: 360px; padding: 25px 18px; }
+  .logo-banco { width: 85px; height: 85px; }
+  h2 { font-size: 1.5rem; }
+}
 
-  .mensagem-caixa { 
-    margin-top:12px; 
-    padding:10px 14px; 
-    border-radius:10px; 
-    display:inline-block; 
-    min-width:250px; 
-    transition:0.3s; 
-  }
+@media (max-width: 480px) {
+  #splash h1 { font-size: 1.8rem; letter-spacing: 2px; }
+  .container { width: 92%; padding: 22px 16px; }
+  .logo-banco { width: 70px; height: 70px; }
+  h2 { font-size: 1.3rem; }
+  .input-group { padding: 8px 12px; }
+  .input-group input { font-size: 0.95rem; }
+  .switcher { gap:6px; }
+  .switcher button { font-size: 0.9rem; padding:8px 12px; min-width:100px; }
+  .btn-acessar { font-size: 0.95rem; padding:10px; }
+  .mensagem-caixa { width:100%; font-size:0.85rem; }
+}
 
-  a.button {
-    display: inline-block;
-    color: #00FF88;
-    margin-top: 16px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: 0.3s;
-  }
-
-  a.button:hover {
-    color: #fff;
-    text-shadow: 0 0 8px #00FF88;
-  }
-
-  /* ---------- RESPONSIVIDADE ---------- */
-  @media (max-width: 768px) {
-    #splash h1 {
-      font-size: 2rem;
-      letter-spacing: 2px;
-    }
-
-    .container {
-      padding: 15px;
-      width: 90%;
-    }
-
-    .logo-banco {
-      width: 80px;
-      height: 80px;
-    }
-
-    h2 {
-      font-size: 1.4rem;
-    }
-
-    .switcher {
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .switcher button {
-      width: 100%;
-      font-size: 1rem;
-    }
-
-    .btn-acessar {
-      width: 100%;
-      padding: 12px;
-      font-size: 1rem;
-    }
-
-    .mensagem-caixa {
-      width: 100%;
-      font-size: 0.9rem;
-      word-wrap: break-word;
-    }
-  }
-
-  @media (max-width: 480px) {
-    #splash h1 {
-      font-size: 1.5rem;
-    }
-
-    .logo-banco {
-      width: 70px;
-      height: 70px;
-    }
-
-    .btn-acessar {
-      font-size: 0.9rem;
-      padding: 10px;
-    }
-  }
+@media (max-width: 360px) {
+  #splash h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.1rem; }
+  .switcher button { font-size: 0.85rem; }
+}
 </style>
 </head>
 
 <body>
-  <!-- ---------- Splash Screen ---------- -->
   <div id="splash">
     <h1>First Bank</h1>
   </div>
 
-  <!-- ---------- Container principal ---------- -->
   <div class="container">
     <img src="logo.png" alt="Logo Banco Seguro" class="logo-banco">
-    <h2>First Bank</h2>
+    
 
     <div class="switcher">
       <button id="btn-login" class="ativo" onclick="mostrar('login')">Entrar</button>
       <button id="btn-cadastro" onclick="mostrar('cadastro')">Criar conta</button>
     </div>
 
-    <!-- FORM LOGIN -->
+    <!-- Login -->
     <div id="form-login" class="formulario ativo">
       <div class="input-group">
         <span class="icon">👤</span>
         <input type="text" id="cpfLogin" data-mask="cpf" placeholder="Digite seu CPF">
       </div>
-
       <div class="input-group">
         <span class="icon">🔒</span>
         <input type="password" id="senhaLogin" placeholder="Digite sua senha">
       </div>
-
       <button class="btn-acessar" onclick="verificarLogin()">Acessar</button>
       <div id="mensagemLogin" class="mensagem-caixa" style="display:none;"></div>
     </div>
 
-    <!-- FORM CADASTRO -->
+    <!-- Cadastro -->
     <div id="form-cadastro" class="formulario">
       <div class="input-group">
         <span class="icon">👤</span>
         <input type="text" id="cpfCadastro" data-mask="cpf" placeholder="CPF (novo usuário)">
       </div>
-
       <div class="input-group">
         <span class="icon">📞</span>
         <input type="text" id="telefoneCadastro" data-mask="telefone" placeholder="Telefone (ex: (11) 91234-5678)">
       </div>
-
       <div class="input-group">
         <span class="icon">🔒</span>
         <input type="password" id="senhaCadastro" placeholder="Senha (mín. 4 caracteres)">
       </div>
-
       <div class="input-group">
         <span class="icon">🔒</span>
         <input type="password" id="senhaCadastroConf" placeholder="Confirme a senha">
       </div>
-
       <button class="btn-acessar" onclick="criarConta()">Criar conta</button>
       <div id="mensagemCadastro" class="mensagem-caixa" style="display:none;"></div>
     </div>
@@ -311,168 +280,155 @@
   </div>
 
 <script>
-  // ---------- Splash desaparece e mostra login ----------
-  window.addEventListener('load', ()=>{
-    const splash = document.getElementById('splash');
-    const container = document.querySelector('.container');
-    setTimeout(()=>{
-      splash.classList.add('fade-out');
-      setTimeout(()=> {
-        splash.style.display='none';
-        container.style.display='block';
-      }, 1000);
-    }, 2500);
-  });
+window.addEventListener('load', ()=>{
+  const splash = document.getElementById('splash');
+  const container = document.querySelector('.container');
+  setTimeout(()=>{
+    splash.classList.add('fade-out');
+    setTimeout(()=> {
+      splash.style.display='none';
+      container.style.display='block';
+    }, 1000);
+  }, 2500);
+});
 
-  // ---------- Funções Login/Cadastro ----------
-  function mostrar(tipo){
-    document.getElementById("form-login").classList.remove("ativo");
-    document.getElementById("form-cadastro").classList.remove("ativo");
-    document.getElementById("btn-login").classList.remove("ativo");
-    document.getElementById("btn-cadastro").classList.remove("ativo");
-
-    if(tipo === "login"){
-      document.getElementById("form-login").classList.add("ativo");
-      document.getElementById("btn-login").classList.add("ativo");
-    } else {
-      document.getElementById("form-cadastro").classList.add("ativo");
-      document.getElementById("btn-cadastro").classList.add("ativo");
-    }
-    ocultarMensagens();
+function mostrar(tipo){
+  document.getElementById("form-login").classList.remove("ativo");
+  document.getElementById("form-cadastro").classList.remove("ativo");
+  document.getElementById("btn-login").classList.remove("ativo");
+  document.getElementById("btn-cadastro").classList.remove("ativo");
+  if(tipo === "login"){
+    document.getElementById("form-login").classList.add("ativo");
+    document.getElementById("btn-login").classList.add("ativo");
+  } else {
+    document.getElementById("form-cadastro").classList.add("ativo");
+    document.getElementById("btn-cadastro").classList.add("ativo");
   }
+  ocultarMensagens();
+}
 
-  function mostrarMensagem(id, texto, cor="#fff", fundo="rgba(0,0,0,0.35)"){
+function mostrarMensagem(id, texto, cor="#fff", fundo="rgba(0,0,0,0.35)"){
+  const el = document.getElementById(id);
+  el.style.display = "inline-block";
+  el.style.color = cor;
+  el.style.background = fundo;
+  el.innerText = texto;
+}
+
+function ocultarMensagens(){
+  ["mensagemLogin","mensagemCadastro"].forEach(id => {
     const el = document.getElementById(id);
-    el.style.display = "inline-block";
-    el.style.color = cor;
-    el.style.background = fundo;
-    el.innerText = texto;
+    el.style.display = "none";
+    el.innerText = "";
+  });
+}
+
+function carregarUsuarios(){
+  const raw = localStorage.getItem("banco_usuarios");
+  return raw ? JSON.parse(raw) : {};
+}
+function salvarUsuarios(obj){
+  localStorage.setItem("banco_usuarios", JSON.stringify(obj));
+}
+
+function formatarCPF(valor){
+  const nums = valor.replace(/\D/g,'').slice(0,11);
+  const partes = [];
+  if(nums.length>0) partes.push(nums.slice(0,3));
+  if(nums.length>3) partes.push(nums.slice(3,6));
+  if(nums.length>6) partes.push(nums.slice(6,9));
+  const finais = nums.slice(9,11);
+  let resultado = partes.join('.');
+  if(finais) resultado += (resultado ? '-' : '') + finais;
+  return resultado;
+}
+function formatarTelefone(valor){
+  const nums = valor.replace(/\D/g,'').slice(0,11);
+  if(nums.length<=2) return '('+nums;
+  if(nums.length<=7) return '('+nums.slice(0,2)+') '+nums.slice(2);
+  return '('+nums.slice(0,2)+') '+nums.slice(2,7)+'-'+nums.slice(7);
+}
+function aplicarMascara(input, tipo){
+  const start = input.selectionStart;
+  const oldVal = input.value;
+  let novoVal;
+  if(tipo==='cpf') novoVal = formatarCPF(oldVal);
+  else if(tipo==='telefone') novoVal = formatarTelefone(oldVal);
+  input.value = novoVal;
+  let numerosAntesCursor = oldVal.slice(0,start).replace(/\D/g,'').length;
+  let pos=0, contNums=0;
+  while(pos<novoVal.length && contNums<numerosAntesCursor){
+    if(/\d/.test(novoVal[pos])) contNums++;
+    pos++;
   }
+  input.setSelectionRange(pos,pos);
+}
+function ativarMascaras(){
+  document.querySelectorAll('input[data-mask]').forEach(input=>{
+    const tipo = input.dataset.mask;
+    const max = tipo==='cpf'?14:15;
+    input.setAttribute('maxlength', max);
+    input.addEventListener('input', e=>aplicarMascara(e.target,tipo));
+    input.addEventListener('paste', e=>setTimeout(()=>aplicarMascara(e.target,tipo),0));
+  });
+}
+document.addEventListener('DOMContentLoaded', ativarMascaras);
 
-  function ocultarMensagens(){
-    ["mensagemLogin","mensagemCadastro"].forEach(id => {
-      const el = document.getElementById(id);
-      el.style.display = "none";
-      el.innerText = "";
-    });
+function criarConta(){
+  ocultarMensagens();
+  const cpfRaw = document.getElementById("cpfCadastro").value;
+  const telefoneRaw = document.getElementById("telefoneCadastro").value;
+  const senha = document.getElementById("senhaCadastro").value;
+  const senhaConf = document.getElementById("senhaCadastroConf").value;
+
+  const cpf = cpfRaw.replace(/\D/g,'');
+  const telefone = telefoneRaw.replace(/\D/g,'');
+
+  if(!cpf){ mostrarMensagem("mensagemCadastro","Digite um CPF válido.","#fff","rgba(255,140,0,0.2)"); return; }
+  if(!telefone || telefone.length<10){ mostrarMensagem("mensagemCadastro","Telefone inválido","#fff","rgba(255,140,0,0.2)"); return; }
+  if(senha.length<4){ mostrarMensagem("mensagemCadastro","Senha muito curta (mín 4 caracteres).","#fff","rgba(255,0,0,0.25)"); return; }
+  if(senha !== senhaConf){ mostrarMensagem("mensagemCadastro","As senhas não conferem","#fff","rgba(255,0,0,0.25)"); return; }
+
+  const usuarios = carregarUsuarios();
+  if(usuarios[cpf]){ mostrarMensagem("mensagemCadastro","Já existe uma conta com esse CPF","#fff","rgba(255,140,0,0.2)"); return; }
+
+  usuarios[cpf] = { senha, telefone };
+  salvarUsuarios(usuarios);
+  mostrarMensagem("mensagemCadastro","✅ Conta criada! Faça login agora.","lightgreen","rgba(0,128,0,0.15)");
+  setTimeout(()=>{
+    document.getElementById("cpfCadastro").value="";
+    document.getElementById("telefoneCadastro").value="";
+    document.getElementById("senhaCadastro").value="";
+    document.getElementById("senhaCadastroConf").value="";
+    mostrar("login");
+  },1000);
+}
+
+function verificarLogin(){
+  ocultarMensagens();
+  const cpfRaw = document.getElementById("cpfLogin").value;
+  const senha = document.getElementById("senhaLogin").value;
+  const cpf = cpfRaw.replace(/\D/g,'');
+  if(!cpf || !senha){ mostrarMensagem("mensagemLogin","Preencha CPF e senha","#fff","rgba(255,140,0,0.2)"); return; }
+
+  const usuarios = carregarUsuarios();
+  if(usuarios[cpf] && usuarios[cpf].senha === senha){
+    mostrarMensagem("mensagemLogin","✅ Login bem-sucedido! Redirecionando...","lightgreen","rgba(0,128,0,0.15)");
+    localStorage.setItem('ultimo_cpf_logado', cpf);
+    setTimeout(()=> window.location.href="index1.html",1000);
+  } else {
+    mostrarMensagem("mensagemLogin","❌ CPF ou senha incorretos","#fff","rgba(255,0,0,0.25)");
   }
+}
 
-  function carregarUsuarios(){
-    const raw = localStorage.getItem("banco_usuarios");
-    return raw ? JSON.parse(raw) : {};
+(function inicializarExemplo(){
+  const usuarios = carregarUsuarios();
+  const exemploCpf = "12345678910";
+  if(!usuarios[exemploCpf]){ 
+    usuarios[exemploCpf]={ senha:"2000", telefone:"11999998888" };
+    salvarUsuarios(usuarios); 
   }
-
-  function salvarUsuarios(obj){
-    localStorage.setItem("banco_usuarios", JSON.stringify(obj));
-  }
-
-  // ---------- Máscaras de CPF/Telefone ----------
-  function formatarCPF(valor){
-    const nums = valor.replace(/\D/g,'').slice(0,11);
-    const partes = [];
-    if(nums.length>0) partes.push(nums.slice(0,3));
-    if(nums.length>3) partes.push(nums.slice(3,6));
-    if(nums.length>6) partes.push(nums.slice(6,9));
-    const finais = nums.slice(9,11);
-    let resultado = partes.join('.');
-    if(finais) resultado += (resultado ? '-' : '') + finais;
-    return resultado;
-  }
-
-  function formatarTelefone(valor){
-    const nums = valor.replace(/\D/g,'').slice(0,11);
-    if(nums.length<=2) return '('+nums;
-    if(nums.length<=7) return '('+nums.slice(0,2)+') '+nums.slice(2);
-    return '('+nums.slice(0,2)+') '+nums.slice(2,7)+'-'+nums.slice(7);
-  }
-
-  function aplicarMascara(input, tipo){
-    const start = input.selectionStart;
-    const oldVal = input.value;
-    let novoVal;
-    if(tipo==='cpf') novoVal = formatarCPF(oldVal);
-    else if(tipo==='telefone') novoVal = formatarTelefone(oldVal);
-    input.value = novoVal;
-
-    let numerosAntesCursor = oldVal.slice(0,start).replace(/\D/g,'').length;
-    let pos=0, contNums=0;
-    while(pos<novoVal.length && contNums<numerosAntesCursor){
-      if(/\d/.test(novoVal[pos])) contNums++;
-      pos++;
-    }
-    input.setSelectionRange(pos,pos);
-  }
-
-  function ativarMascaras(){
-    document.querySelectorAll('input[data-mask]').forEach(input=>{
-      const tipo = input.dataset.mask;
-      const max = tipo==='cpf'?14:15;
-      input.setAttribute('maxlength', max);
-      input.addEventListener('input', e=>aplicarMascara(e.target,tipo));
-      input.addEventListener('paste', e=>setTimeout(()=>aplicarMascara(e.target,tipo),0));
-    });
-  }
-  document.addEventListener('DOMContentLoaded', ativarMascaras);
-
-  // ---------- Função criar conta ----------
-  function criarConta(){
-    ocultarMensagens();
-    const cpfRaw = document.getElementById("cpfCadastro").value;
-    const telefoneRaw = document.getElementById("telefoneCadastro").value;
-    const senha = document.getElementById("senhaCadastro").value;
-    const senhaConf = document.getElementById("senhaCadastroConf").value;
-
-    const cpf = cpfRaw.replace(/\D/g,'');
-    const telefone = telefoneRaw.replace(/\D/g,'');
-
-    if(!cpf){ mostrarMensagem("mensagemCadastro","Digite um CPF válido.","#fff","rgba(255,140,0,0.2)"); return; }
-    if(!telefone || telefone.length<10){ mostrarMensagem("mensagemCadastro","Telefone inválido","#fff","rgba(255,140,0,0.2)"); return; }
-    if(senha.length<4){ mostrarMensagem("mensagemCadastro","Senha muito curta (mín 4 caracteres).","#fff","rgba(255,0,0,0.25)"); return; }
-    if(senha !== senhaConf){ mostrarMensagem("mensagemCadastro","As senhas não conferem","#fff","rgba(255,0,0,0.25)"); return; }
-
-    const usuarios = carregarUsuarios();
-    if(usuarios[cpf]){ mostrarMensagem("mensagemCadastro","Já existe uma conta com esse CPF","#fff","rgba(255,140,0,0.2)"); return; }
-
-    usuarios[cpf] = { senha, telefone };
-    salvarUsuarios(usuarios);
-    mostrarMensagem("mensagemCadastro","✅ Conta criada! Faça login agora.","lightgreen","rgba(0,128,0,0.15)");
-
-    setTimeout(()=>{
-      document.getElementById("cpfCadastro").value="";
-      document.getElementById("telefoneCadastro").value="";
-      document.getElementById("senhaCadastro").value="";
-      document.getElementById("senhaCadastroConf").value="";
-      mostrar("login");
-    },1000);
-  }
-
-  // ---------- Função login ----------
-  function verificarLogin(){
-    ocultarMensagens();
-    const cpfRaw = document.getElementById("cpfLogin").value;
-    const senha = document.getElementById("senhaLogin").value;
-    const cpf = cpfRaw.replace(/\D/g,'');
-
-    if(!cpf || !senha){ mostrarMensagem("mensagemLogin","Preencha CPF e senha","#fff","rgba(255,140,0,0.2)"); return; }
-    const usuarios = carregarUsuarios();
-    if(usuarios[cpf] && usuarios[cpf].senha === senha){
-      mostrarMensagem("mensagemLogin","✅ Login bem-sucedido! Redirecionando...","lightgreen","rgba(0,128,0,0.15)");
-      localStorage.setItem('ultimo_cpf_logado', cpf);
-      setTimeout(()=> window.location.href="index1.html",1000);
-    } else {
-      mostrarMensagem("mensagemLogin","❌ CPF ou senha incorretos","#fff","rgba(255,0,0,0.25)");
-    }
-  }
-
-  // ---------- Conta de exemplo inicial ----------
-  (function inicializarExemplo(){
-    const usuarios = carregarUsuarios();
-    const exemploCpf = "12345678910";
-    if(!usuarios[exemploCpf]){ 
-      usuarios[exemploCpf]={ senha:"2000", telefone:"11999998888" };
-      salvarUsuarios(usuarios); 
-    }
-  })();
+})();
 </script>
 </body>
 </html>
