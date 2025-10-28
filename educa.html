@@ -125,6 +125,7 @@
   .opcao:hover {
     background: rgba(0, 255, 136, 0.15);
     box-shadow: 0 0 15px #00ff88;
+    transform: translateY(-3px);
   }
 
   .opcao i {
@@ -170,8 +171,6 @@
 </head>
 <body>
 
- 
-
   <!-- Logos com X -->
   <div class="header-logos">
     <img src="logo.png" alt="FirstBank">
@@ -192,17 +191,19 @@
 
   <!-- Opções com ícones -->
   <div class="opcoes">
-    <div class="opcao">
+    <div class="opcao" onclick="window.location.href='metas.html'">
       <i class='bx bx-bullseye'></i>
       <h3>Metas</h3>
       <p>Defina objetivos claros e acompanhe seu progresso financeiro.</p>
     </div>
-    <div class="opcao">
+
+    <div class="opcao" onclick="window.location.href='investimento.html'">
       <i class='bx bx-line-chart'></i>
       <h3>Investimento</h3>
       <p>Aprenda a investir com segurança e inteligência.</p>
     </div>
-    <div class="opcao">
+
+    <div class="opcao" onclick="window.location.href='gastos.html'">
       <i class='bx bx-wallet'></i>
       <h3>Gastos</h3>
       <p>Controle suas despesas e mantenha o equilíbrio financeiro.</p>

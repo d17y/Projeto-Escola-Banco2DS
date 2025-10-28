@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Educa+ Metas Futuristas</title>
+<style>
+  * {margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif;}
+  body {
+    background: linear-gradient(135deg,#000,#002d1f 60%,#00ff88 150%);
+    color:#fff;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:20px;
+  }
+  h1 { text-align:center; font-size:2em; margin:20px 0; color:#00ff88; text-shadow:0 0 15px #00ffaa; }
+  
+  /* BOTÃO VOLTAR */
+  .back-btn {
+    background:none;
+    border:1px solid rgba(0,255,136,0.3);
+    color:#00ff88;
+    border-radius:12px;
+    padding:8px 14px;
+    cursor:pointer;
+    margin-bottom:15px;
+    text-shadow:0 0 5px #00ff88;
+    transition:0.3s;
+  }
+  .back-btn:hover { background: rgba(0,255,136,0.1); box-shadow:0 0 15px #00ff88; }
+
+  .saldo-card {
+    background: rgba(0,255,136,0.08);
+    border:1px solid rgba(0,255,136,0.2);
+    padding:15px 25px;
+    border-radius:20px;
+    text-align:center;
+    margin-bottom:25px;
+    box-shadow: inset 0 0 15px rgba(0,255,136,0.08);
+  }
+  .saldo-label { font-size:0.9em; opacity:0.7; letter-spacing:1px; }
+  .saldo-row { display:flex; justify-content:center; align-items:center; gap:8px; margin-top:5px; }
+  .saldo { font-size:32px; font-weight:600; color:#00ff88; text-shadow:0 0 10px #00ff88; transition:opacity 0.3s ease; }
+  .eye-btn { background:none; border:none; cursor:pointer; }
+  .eye-btn img { width:26px; height:26px; filter:drop-shadow(0 0 5px #00ff88); }
+  
+  #metasContainer { display:flex; flex-direction:column; gap:20px; width:100%; max-width:420px; }
+  .meta-container {
+    background: rgba(0,10,20,0.85);
+    border:2px solid #00ffaa;
+    border-radius:20px;
+    padding:20px;
+    backdrop-filter: blur(8px);
+    box-shadow:0 0 20px #00ffaa55;
+  }
+  .meta-header h2 { color:#00ffcc; text-shadow:0 0 10px #00ff99; margin-bottom:8px; font-size:1.2em; text-align:center; }
+  .meta-info { display:flex; justify-content:space-between; font-size:0.85em; color:#99ffee; margin-bottom:10px; }
+  .progress-container { position:relative; background: rgba(255,255,255,0.08); border-radius:10px; height:12px; overflow:hidden; }
+  .progress-bar { position:absolute; height:100%; width:0%; background: linear-gradient(90deg,#00ffaa,#00ffcc,#00ffff); box-shadow:0 0 10px #00ffaa; transition:width 0.5s; }
+  .percent { text-align:center; font-size:0.85em; color:#bff; margin-top:5px; }
+  .resumo { text-align:center; font-size:0.8em; color:#aaffff; margin-top:5px; }
+  .btn-deposito { display:block; width:100%; margin-top:10px; padding:10px; border:none; border-radius:10px; background:linear-gradient(90deg,#00ffaa,#00ffcc); color:#000; font-weight:bold; cursor:pointer; text-shadow:0 0 5px #00ffee; }
+  .btn-deposito:hover { box-shadow:0 0 20px #00ffaa; transform:scale(1.05); }
+  .form-overlay {
+    position: fixed; top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.8);
+    display:flex; justify-content:center; align-items:center;
+    visibility:hidden; opacity:0; transition:0.3s;
+  }
+  .form-overlay.active { visibility:visible; opacity:1; }
+  .formulario {
+    background: rgba(0,15,25,0.9); border:2px solid #00ffaa;
+    border-radius:15px; padding:25px; width:300px; text-align:center;
+    box-shadow:0 0 25px #00ffcc55;
+  }
+  .formulario input { width:90%; margin:8px 0; padding:10px; border:none; border-radius:10px; outline:none; background: rgba(255,255,255,0.1); color:#00ffcc; text-align:center; }
+  .formulario button { margin-top:10px; padding:10px 15px; border:none; border-radius:10px; background:linear-gradient(90deg,#00ffaa,#00ffff); cursor:pointer; font-weight:bold; color:#000; }
+  .adicionar {
+    position:fixed; right:20px; bottom:20px;
+    background:linear-gradient(135deg,#00ffaa,#00ffff);
+    width:60px; height:60px; border-radius:50%;
+    border:none; font-size:2em; cursor:pointer;
+    box-shadow:0 0 25px #00ffaa; transition:0.3s;
+  }
+  .adicionar:hover { transform:scale(1.1); box-shadow:0 0 35px #00ffaa; }
+</style>
+</head>
+<body>
+
+<button class="back-btn" onclick="window.location.href='index3.html'">← Voltar</button>
+
+<h1>⚡ Minhas Metas ⚡</h1>
+
+
+
+<div id="metasContainer"></div>
+
+<button class="adicionar" id="btnAdicionar">+</button>
+
+<div class="form-overlay" id="overlayForm">
+  <div class="formulario">
+    <h2>Nova Meta</h2>
+    <input type="text" id="nomeMeta" placeholder="Nome da meta">
+    <input type="number" id="valorTotal" placeholder="Valor total (R$)">
+    <button id="criarMeta">Criar</button>
+  </div>
+</div>
+
+<script>
+// ==== SALDO ====
+const saldoEl = document.getElementById('saldo');
+let saldoVisivel = true;
+if(!localStorage.getItem('saldo_valor')) localStorage.setItem('saldo_valor', JSON.stringify(1850));
+let saldoValor = parseFloat(JSON.parse(localStorage.getItem('saldo_valor')));
+
+function atualizarSaldo(valor){
+  saldoEl.style.opacity = 0;
+  setTimeout(()=>{
+    saldoEl.innerText = saldoVisivel ? `R$ ${valor.toFixed(2)}` : 'R$ ●●●●●●';
+    saldoEl.style.opacity = 1;
+  },150);
+}
+atualizarSaldo(saldoValor);
+document.getElementById('toggleSaldo').addEventListener('click', ()=>{
+  saldoVisivel = !saldoVisivel;
+  atualizarSaldo(saldoValor);
+  document.getElementById('eyeIcon').src = saldoVisivel
+    ? "https://img.icons8.com/ios-filled/50/ffffff/visible.png"
+    : "https://img.icons8.com/ios-filled/50/ffffff/invisible.png";
+});
+
+// ==== METAS ====
+const metasContainer = document.getElementById('metasContainer');
+const btnAdicionar = document.getElementById('btnAdicionar');
+const overlayForm = document.getElementById('overlayForm');
+const criarMeta = document.getElementById('criarMeta');
+
+btnAdicionar.addEventListener('click', ()=>overlayForm.classList.add('active'));
+overlayForm.addEventListener('click', e=>{ if(e.target===overlayForm) overlayForm.classList.remove('active'); });
+
+criarMeta.addEventListener('click', ()=>{
+  const nome = document.getElementById('nomeMeta').value;
+  const total = parseFloat(document.getElementById('valorTotal').value);
+  if(!nome || !total) return;
+  criarCardMeta(nome,total);
+  overlayForm.classList.remove('active');
+  document.querySelectorAll('.formulario input').forEach(i=>i.value='');
+});
+
+function criarCardMeta(nome,total){
+  const metaDiv = document.createElement('div');
+  metaDiv.classList.add('meta-container');
+  metaDiv.innerHTML = `
+    <div class="meta-header"><h2>${nome}</h2></div>
+    <div class="meta-info"><span>Total: R$ ${total.toFixed(2)}</span></div>
+    <div class="progress-container"><div class="progress-bar"></div></div>
+    <div class="percent">0% Concluído</div>
+    <div class="resumo">Faltam R$ ${total.toFixed(2)}!</div>
+    <button class="btn-deposito">+ Depósito</button>
+  `;
+  let acumulado = 0;
+  const barra = metaDiv.querySelector('.progress-bar');
+  const percent = metaDiv.querySelector('.percent');
+  const resumo = metaDiv.querySelector('.resumo');
+  const btnDep = metaDiv.querySelector('.btn-deposito');
+
+  btnDep.addEventListener('click', ()=>{
+    const valor = parseFloat(prompt(`Quanto deseja depositar? Saldo disponível: R$ ${saldoValor.toFixed(2)}`));
+    if(!valor || valor<=0) return;
+    if(valor>saldoValor){ alert('Saldo insuficiente!'); return; }
+
+    acumulado += valor;
+    saldoValor -= valor;
+    localStorage.setItem('saldo_valor',JSON.stringify(saldoValor));
+    atualizarSaldo(saldoValor);
+
+    const progresso = Math.min((acumulado/total)*100,100);
+    barra.style.width = progresso+'%';
+    percent.textContent = `${Math.floor(progresso)}% Concluído`;
+    const restante = Math.max(total-acumulado,0);
+    resumo.textContent = restante>0 ? `Faltam R$ ${restante.toFixed(2)}!` : `🎉 Parabéns! Meta concluída!`;
+  });
+
+  metasContainer.appendChild(metaDiv);
+}
+</script>
+
+</body>
+</html>
