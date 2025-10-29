@@ -5,16 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PIX - First Bank</title>
 <style>
-* {margin:0; padding:0; box-sizing:border-box;}
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
 body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg,#000,#002d1f 60%,#00ff88 150%);
-  color:#fff;
-  min-height:100vh;
+  height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
   padding:20px;
+  background: linear-gradient(135deg,#000,#002d1f 60%,#00ff88 150%);
+  color:#fff;
 }
 .app {
   background: rgba(255,255,255,0.05);
@@ -106,24 +105,27 @@ if (!localStorage.getItem('saldo_valor')) {
   localStorage.setItem('saldo_valor', JSON.stringify(450.99));
 }
 
+// Formatação BRL
 function formatBRL(n) {
   return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
+// Funções de saldo
 function getSaldo() {
   return parseFloat(JSON.parse(localStorage.getItem('saldo_valor') || '0'));
 }
-
 function setSaldo(v) {
   localStorage.setItem('saldo_valor', JSON.stringify(v));
   atualizarSaldo();
 }
-
 function atualizarSaldo() {
   saldoEl.textContent = `Saldo atual: ${formatBRL(getSaldo())}`;
 }
 
-// Ação do botão
+// Inicializa saldo
+atualizarSaldo();
+
+// Ação do botão PIX
 btn.addEventListener('click', () => {
   msgEl.style.display = 'none';
   msgEl.style.color = '#ffd9d9';
@@ -147,6 +149,16 @@ btn.addEventListener('click', () => {
   // Atualiza saldo
   setSaldo(Number((saldoAtual - valor).toFixed(2)));
 
+  // SALVA O GASTO NO LOCALSTORAGE
+  const gastos = JSON.parse(localStorage.getItem('gastos')) || [];
+  gastos.push({
+    tipo: 'pix',
+    descricao: dest,
+    valor: valor,
+    data: new Date().toISOString()
+  });
+  localStorage.setItem('gastos', JSON.stringify(gastos));
+
   msgEl.textContent = `PIX de ${formatBRL(valor)} enviado para ${dest}!`;
   msgEl.style.color = '#bfffd6';
   msgEl.style.display = 'block';
@@ -156,9 +168,6 @@ btn.addEventListener('click', () => {
   // Atualiza visualmente
   localStorage.setItem('saldo_updated_at', Date.now());
 });
-
-// Exibe saldo ao carregar
-atualizarSaldo();
 </script>
 
 </body>
