@@ -1,1 +1,377 @@
-<h1>ERROR!! TAMO TRABALHANDO AINDA AI</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Investimentos - Educa Finance</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+/* Adicione dentro do <style> */
+#modalValor {
+  color: #001a12; /* texto preto */
+  background: rgb(255, 255, 255); /* fundo levemente transparente */
+  border: 1px solid rgba(0,255,136,0.12);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 1rem;
+}
+
+
+  :root{
+    --bg1: #00120a;
+    --neon: #00ff88;
+    --neon-weak: rgba(0,255,136,0.12);
+    --glass: rgba(255,255,255,0.03);
+    --accent-red: #ff4c4c;
+    --card-radius: 14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;color:#e7fff2}
+  body{
+    background: linear-gradient(135deg,#000 0%,#00120a 40%,#003822 140%);
+    min-height:100vh;
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+  }
+  .topbar{
+    width:100%; max-width:1100px; display:flex; align-items:center; gap:12px; justify-content:space-between;
+  }
+  .back {
+    background:none;border:1px solid rgba(0,255,136,0.18);color:var(--neon);padding:10px 14px;border-radius:12px;cursor:pointer;display:flex;gap:8px;align-items:center;box-shadow:0 0 8px rgba(0,255,136,0.12);
+  }
+  .title { font-size:1.4rem; color:var(--neon); text-shadow:0 0 10px #00ff88; font-weight:700; }
+  .layout {
+    width:100%; max-width:1100px; display:grid; grid-template-columns: 1.1fr 0.9fr; gap:20px;
+  }
+  .left { display:flex; flex-direction:column; gap:18px; }
+  .panel {
+    background:var(--glass); border:1px solid rgba(0,255,136,0.12); border-radius:var(--card-radius);
+    padding:18px; box-shadow:0 8px 30px rgba(0,255,136,0.03);
+  }
+  .summary { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  .patrimonio { display:flex; flex-direction:column; gap:6px; }
+  .patrimonio h2 { font-size:1.1rem; color:var(--neon); text-shadow:0 0 8px #00ff88; }
+  .patrimonio .valor { font-size:1.9rem; font-weight:700; color:#dfffe9; }
+  .actions { display:flex; gap:8px; align-items:center; }
+  .btn {
+    background:linear-gradient(90deg,var(--neon),#00ffcc); border:none; color:#001a12; padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer; box-shadow:0 0 12px rgba(0,255,136,0.18);
+  }
+  .btn.ghost { background:transparent; border:1px solid rgba(255,255,255,0.06); color:#bfffe0; }
+  .cards { display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin-top:6px; }
+  .card {
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:12px; padding:14px; border:1px solid rgba(0,255,136,0.06);
+    display:flex; flex-direction:column; gap:10px; min-height:110px;
+  }
+  .card h3 { color:var(--neon); font-size:0.95rem }
+  .card .small { font-size:0.85rem; opacity:0.9 }
+  .card .balance { font-weight:700; font-size:1.25rem }
+  .crypto-graph { height:48px; width:100%; }
+  .right { display:flex; flex-direction:column; gap:18px; align-items:stretch; }
+  .dist { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:14px; }
+  .chart-wrap { display:flex; flex-direction:column; align-items:center; gap:8px; width:220px; }
+  canvas#distChart { max-width:220px; }
+  .legend { display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
+  .legend .item { display:flex; gap:10px; align-items:center; font-size:0.95rem; }
+  .dot { width:12px; height:12px; border-radius:50%; box-shadow:0 0 8px; }
+  .dot.poup { background: rgba(0,255,136,0.9); box-shadow:0 0 10px rgba(0,255,136,0.3); }
+  .dot.crypto { background: #ffd24c; box-shadow:0 0 10px rgba(255,210,76,0.2); }
+  .dot.meta { background: #66fff0; box-shadow:0 0 10px rgba(102,255,240,0.12); }
+  .modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:60; }
+  .modal { background:linear-gradient(180deg, rgba(0,20,25,0.96), rgba(0,10,18,0.95)); padding:20px; border-radius:14px; width:92%; max-width:720px; border:1px solid rgba(0,255,136,0.08); box-shadow:0 20px 60px rgba(0,255,136,0.06); color:#dfffe9; }
+  .modal h3 { color:var(--neon); margin-bottom:8px; }
+  .row { display:flex; gap:12px; align-items:center; }
+  .col { flex:1; }
+  .slider { width:100%; }
+  .modal .foot { display:flex; gap:10px; justify-content:flex-end; margin-top:14px; }
+  small.note { display:block; font-size:0.78rem; opacity:0.75; margin-top:6px; }
+  @media(max-width:980px){ .layout{ grid-template-columns:1fr; } .cards{ grid-template-columns: repeat(2,1fr);} .chart-wrap{ width:160px;} }
+  @media(max-width:560px){ .cards{ grid-template-columns:1fr;} .topbar{flex-direction:column;align-items:flex-start; gap:8px;} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="back" onclick="window.history.back()">← Voltar</button>
+  <div class="title">Investimentos • Painel Interativo</div>
+  <div style="width:8px"></div>
+</div>
+
+<div class="layout">
+  <div class="left">
+    <div class="panel summary">
+      <div class="patrimonio">
+        <h2>Patrimônio Investido</h2>
+        <div class="valor" id="patrimonioTotal">R$ 0,00</div>
+        <small class="small">Soma de Poupança + Cripto + Metas</small>
+      </div>
+      <div class="actions">
+        <button class="btn" id="openSim">Simular Investimento</button>
+        <button class="btn ghost" id="refreshMarket">Atualizar mercado</button>
+      </div>
+    </div>
+
+    <div class="panel cards">
+      <!-- Poupança -->
+      <div class="card" id="cardPoup">
+        <h3>Poupança</h3>
+        <div class="small">Rendimento estimado: <span id="poupRend">0.0%</span>/mês</div>
+        <div class="balance" id="poupSaldo">R$ 0,00</div>
+        <div style="display:flex; gap:8px; margin-top:auto;">
+          <button class="btn" onclick="abrirOperacao('poup','depositar')">Aplicar</button>
+          <button class="btn ghost" onclick="abrirOperacao('poup','retirar')">Retirar</button>
+        </div>
+        <small class="note">Poupança armazenada localmente (localStorage).</small>
+      </div>
+
+      <!-- Cripto -->
+      <div class="card" id="cardCrypto">
+        <h3>Criptomoeda (MOCK)</h3>
+        <div class="small">Preço atual: <strong id="cryptoPrice">--</strong></div>
+        <div class="balance" id="cryptoValor">R$ 0,00</div>
+        <div class="crypto-graph"><canvas id="sparkCrypto"></canvas></div>
+        <div style="display:flex; gap:8px; margin-top:auto;">
+          <button class="btn" onclick="abrirOperacao('crypto','comprar')">Comprar</button>
+          <button class="btn ghost" onclick="abrirOperacao('crypto','vender')">Vender</button>
+        </div>
+        <small class="note">Preço simulado; posição e histórico são reais.</small>
+      </div>
+
+      <!-- Metas -->
+      <div class="card" id="cardMetas">
+        <h3>Metas</h3>
+        <div class="small">Total em metas: <span id="metasTotal">R$ 0,00</span></div>
+        <div class="balance" id="metasValor">R$ 0,00</div>
+        <div style="display:flex; gap:8px; margin-top:auto;">
+          <button class="btn" onclick="window.location.href='metas.html'">Ver metas</button>
+        </div>
+        <small class="note">As metas usam os mesmos depósitos da sua página de Metas.</small>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3 style="color:var(--neon)">Operações Recentes</h3>
+      <div id="operacoesRec" style="margin-top:10px; display:flex; flex-direction:column; gap:10px;"></div>
+      <small class="note">As operações ficam salvas localmente. Experimente comprar um pouco de cripto ou aplicar na poupança.</small>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="panel dist">
+      <div class="chart-wrap">
+        <canvas id="distChart" width="220" height="220"></canvas>
+        <div style="font-size:0.95rem; color:#dfffe9; margin-top:6px;">Distribuição</div>
+      </div>
+
+      <div class="legend">
+        <div class="item"><div class="dot poup"></div> Poupança <strong id="legendPoup">R$ 0,00</strong></div>
+        <div class="item"><div class="dot crypto"></div> Cripto <strong id="legendCrypto">R$ 0,00</strong></div>
+        <div class="item"><div class="dot meta"></div> Metas <strong id="legendMeta">R$ 0,00</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-back" id="modalBack">
+  <div class="modal">
+    <h3 id="modalTitle">Operação</h3>
+    <div class="row">
+      <div class="col">
+        <input type="number" id="modalValor" placeholder="Valor em R$" class="slider"/>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn ghost" onclick="fecharModal()">Cancelar</button>
+      <button class="btn" onclick="confirmarModal()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================
+   Inicialização
+============================ */
+if(!localStorage.getItem('saldo_valor')) localStorage.setItem('saldo_valor', JSON.stringify(1850));
+let saldoValor = parseFloat(localStorage.getItem('saldo_valor'));
+
+if(!localStorage.getItem('poupanca')) localStorage.setItem('poupanca', JSON.stringify({ saldo: 1050, rendimentoMensal: 0.5 }));
+if(!localStorage.getItem('crypto')) localStorage.setItem('crypto', JSON.stringify({ holdings: 0, price: 200, history: [] }));
+if(!localStorage.getItem('metas')) localStorage.setItem('metas', JSON.stringify([
+  { nome:'Notebook', alvo:3000, acumulado:0 },
+  { nome:'Viagem', alvo:5000, acumulado:0 },
+  { nome:'Curso', alvo:800, acumulado:0 }
+]));
+if(!localStorage.getItem('operacoes')) localStorage.setItem('operacoes', JSON.stringify([]));
+if(!localStorage.getItem('gastos')) localStorage.setItem('gastos', JSON.stringify([]));
+
+let poup = JSON.parse(localStorage.getItem('poupanca'));
+let crypto = JSON.parse(localStorage.getItem('crypto'));
+let metas = JSON.parse(localStorage.getItem('metas'));
+let operacoes = JSON.parse(localStorage.getItem('operacoes'));
+let gastos = JSON.parse(localStorage.getItem('gastos'));
+
+/* ============================
+   Funções de operação
+============================ */
+function saveState(){
+  localStorage.setItem('poupanca', JSON.stringify(poup));
+  localStorage.setItem('crypto', JSON.stringify(crypto));
+  localStorage.setItem('metas', JSON.stringify(metas));
+  localStorage.setItem('operacoes', JSON.stringify(operacoes));
+  localStorage.setItem('gastos', JSON.stringify(gastos));
+  localStorage.setItem('saldo_valor', JSON.stringify(saldoValor));
+}
+
+function recordOperacao(tipo,desc,valor){
+  operacoes.unshift({ tipo, desc, valor, data:new Date().toISOString() });
+  if(operacoes.length>20) operacoes.pop();
+}
+
+function investirPoup(valor){
+  if(valor > saldoValor) return alert('Saldo insuficiente');
+  poup.saldo += valor;
+  saldoValor -= valor;
+  gastos.push({ tipo:'poup', descricao:'Aplicação na Poupança', valor, data: new Date().toISOString() });
+  recordOperacao('poup_deposit','Aplicado R$ '+valor.toFixed(2), valor);
+  saveState(); renderAll();
+}
+
+function retirarPoup(valor){
+  if(valor > poup.saldo) return alert('Saldo insuficiente na Poupança');
+  poup.saldo -= valor;
+  saldoValor += valor;
+  gastos.push({ tipo:'poup', descricao:'Retirada da Poupança', valor, data: new Date().toISOString() });
+  recordOperacao('poup_withdraw','Retirado R$ '+valor.toFixed(2), -valor);
+  saveState(); renderAll();
+}
+
+function comprarCrypto(valor){
+  if(valor > saldoValor) return alert('Saldo insuficiente');
+  const qty = valor / crypto.price;
+  crypto.holdings += qty;
+  saldoValor -= valor;
+  crypto.history.push(valor);
+  gastos.push({ tipo:'crypto', descricao:'Compra cripto (MOCK)', valor, data: new Date().toISOString() });
+  recordOperacao('crypto_buy',`Compra R$ ${valor.toFixed(2)} → ${qty.toFixed(6)}MOCK`, valor);
+  saveState(); renderAll();
+}
+
+function venderCrypto(valor){
+  const qty = valor / crypto.price;
+  if(qty > crypto.holdings) return alert('Quantidade insuficiente');
+  crypto.holdings -= qty;
+  saldoValor += valor;
+  gastos.push({ tipo:'crypto', descricao:'Venda cripto (MOCK)', valor, data: new Date().toISOString() });
+  recordOperacao('crypto_sell',`Venda R$ ${valor.toFixed(2)}`, -valor);
+  saveState(); renderAll();
+}
+
+function depositarMeta(idx, valor){
+  if(valor > saldoValor) return alert('Saldo insuficiente');
+  metas[idx].acumulado = (metas[idx].acumulado||0) + valor;
+  saldoValor -= valor;
+  gastos.push({ tipo:'meta', descricao:`Depósito na meta "${metas[idx].nome}"`, valor, data: new Date().toISOString() });
+  recordOperacao('meta_deposit', `Depósito R$ ${valor.toFixed(2)} → ${metas[idx].nome}`, valor);
+  saveState(); renderAll();
+}
+
+/* ============================
+   Render
+============================ */
+function formatBRL(v){ return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2}); }
+
+function renderAll(){
+  document.getElementById('poupSaldo').innerText = formatBRL(poup.saldo);
+  document.getElementById('poupRend').innerText = poup.rendimentoMensal+'%';
+
+  document.getElementById('cryptoValor').innerText = formatBRL(crypto.holdings*crypto.price);
+  document.getElementById('cryptoPrice').innerText = formatBRL(crypto.price);
+
+  let totalMetas = metas.reduce((a,b)=>a+(b.acumulado||0),0);
+  document.getElementById('metasValor').innerText = formatBRL(totalMetas);
+  document.getElementById('metasTotal').innerText = formatBRL(totalMetas);
+
+  let totalPatrimonio = poup.saldo + crypto.holdings*crypto.price + totalMetas;
+  document.getElementById('patrimonioTotal').innerText = formatBRL(totalPatrimonio);
+
+  // Legendas
+  document.getElementById('legendPoup').innerText = formatBRL(poup.saldo);
+  document.getElementById('legendCrypto').innerText = formatBRL(crypto.holdings*crypto.price);
+  document.getElementById('legendMeta').innerText = formatBRL(totalMetas);
+
+  // Operações
+  const opContainer = document.getElementById('operacoesRec');
+  opContainer.innerHTML = '';
+  operacoes.slice(0,10).forEach(op=>{
+    const div = document.createElement('div');
+    div.innerHTML = `<small>[${new Date(op.data).toLocaleString()}]</small> ${op.desc}`;
+    opContainer.appendChild(div);
+  });
+
+  // Distribuição chart
+  if(window.distChart){
+    distChart.data.datasets[0].data = [poup.saldo, crypto.holdings*crypto.price, totalMetas];
+    distChart.update();
+  }
+}
+
+/* ============================
+   Chart
+============================ */
+const ctx = document.getElementById('distChart').getContext('2d');
+window.distChart = new Chart(ctx,{
+  type:'doughnut',
+  data:{
+    labels:['Poupança','Cripto','Metas'],
+    datasets:[{
+      data:[poup.saldo, crypto.holdings*crypto.price, metas.reduce((a,b)=>a+(b.acumulado||0),0)],
+      backgroundColor:['rgba(0,255,136,0.8)','rgba(255,210,76,0.8)','rgba(102,255,240,0.8)'],
+      borderWidth:0
+    }]
+  },
+  options:{ cutout:'70%', plugins:{ legend:{ display:false } } }
+});
+
+/* ============================
+   Modal Interativo
+============================ */
+let modalTarget, modalAction, modalIdx;
+const modalBack = document.getElementById('modalBack');
+function abrirOperacao(target,action,idx){
+  modalTarget = target; modalAction = action; modalIdx = idx||0;
+  document.getElementById('modalTitle').innerText = `${action.toUpperCase()} ${target.toUpperCase()}`;
+  document.getElementById('modalValor').value = '';
+  modalBack.style.display='flex';
+}
+function fecharModal(){ modalBack.style.display='none'; }
+function confirmarModal(){
+  const v = parseFloat(document.getElementById('modalValor').value);
+  if(isNaN(v)||v<=0) return alert('Informe um valor válido');
+  if(modalTarget==='poup'){
+    if(modalAction==='depositar') investirPoup(v); else retirarPoup(v);
+  } else if(modalTarget==='crypto'){
+    if(modalAction==='comprar') comprarCrypto(v); else venderCrypto(v);
+  } else if(modalTarget==='meta'){
+    depositarMeta(modalIdx,v);
+  }
+  fecharModal();
+}
+
+/* ============================
+   Simulação rápida
+============================ */
+document.getElementById('refreshMarket').onclick = ()=>{
+  crypto.price = (180 + Math.random()*60).toFixed(2);
+  renderAll();
+};
+renderAll();
+</script>
+
+</body>
+</html>

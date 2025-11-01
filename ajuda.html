@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suporte</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#000a0f;
+  --bg2:#001a22;
+  --neon:#00ff88;
+  --neon-accent:#00ffcc;
+  --card-radius:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;color:#e7fff2;}
+body{
+  background: linear-gradient(135deg,var(--bg1),var(--bg2));
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px;
+}
+h1{
+  font-size:2rem;
+  color:var(--neon);
+  text-shadow:0 0 10px var(--neon);
+  margin-bottom:20px;
+}
+.panel{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(0,255,136,0.12);
+  border-radius:var(--card-radius);
+  padding:20px;
+  margin-bottom:20px;
+  width:100%;
+  max-width:700px;
+  box-shadow:0 8px 30px rgba(0,255,136,0.03);
+}
+.panel h2{
+  color:var(--neon);
+  text-shadow:0 0 8px var(--neon-accent);
+  margin-bottom:12px;
+}
+.panel p{
+  font-size:0.95rem;
+  color:#dfffe9;
+  margin-bottom:12px;
+}
+input, textarea{
+  width:100%;
+  padding:10px;
+  margin-bottom:12px;
+  border-radius:8px;
+  border:none;
+  background:rgba(255,255,255,0.03);
+  color:#eafff0;
+}
+textarea{resize:none; height:100px;}
+.btn{
+  background: linear-gradient(90deg,var(--neon),var(--neon-accent));
+  border:none;
+  color:#001a12;
+  padding:12px 20px;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 0 12px rgba(0,255,136,0.18);
+  transition:0.3s;
+}
+.btn:hover{box-shadow:0 0 24px rgba(0,255,136,0.28);}
+.faq-item{
+  border:1px solid rgba(0,255,136,0.12);
+  padding:12px;
+  margin-bottom:8px;
+  border-radius:12px;
+  cursor:pointer;
+  background:rgba(0,255,136,0.02);
+  transition:0.3s;
+}
+.faq-item:hover{background:rgba(0,255,136,0.05);}
+.answer{
+  display:none;
+  margin-top:6px;
+  font-size:0.9rem;
+  color:#bfffe0;
+}
+.status{
+  text-align:center;
+  font-size:1.1rem;
+  margin-bottom:12px;
+}
+.back-btn{
+  align-self:flex-start;
+  margin-bottom:20px;
+  background: none;
+  border: 1px solid var(--neon);
+  color: var(--neon);
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  text-shadow:0 0 8px var(--neon);
+  transition:0.3s;
+}
+.back-btn:hover{
+  background: var(--neon-accent);
+  color:#001a12;
+  box-shadow:0 0 20px var(--neon-accent);
+}
+@keyframes neonPulse{
+  0%,100%{text-shadow:0 0 8px var(--neon);}
+  50%{text-shadow:0 0 20px var(--neon-accent);}
+}
+</style>
+</head>
+<body>
+
+<!-- Botão de voltar -->
+<button class="back-btn" onclick="voltar()">← Voltar</button>
+
+<h1>Suporte </h1>
+
+<div class="panel">
+  <h2>Status do Suporte</h2>
+  <div class="status" id="status">Carregando...</div>
+  <small style="opacity:0.7;">Nosso painel indica disponibilidade em tempo real.</small>
+</div>
+
+<div class="panel">
+  <h2>Perguntas Frequentes</h2>
+  <div class="faq-item" onclick="toggleFAQ(this)">
+    Como aplico na poupança?
+    <div class="answer">Clique em "Aplicar" na seção de Poupança e insira o valor desejado.</div>
+  </div>
+  <div class="faq-item" onclick="toggleFAQ(this)">
+    Posso vender minha cripto?
+    <div class="answer">Sim! Na seção Cripto, clique em "Vender" e escolha o valor.</div>
+  </div>
+  <div class="faq-item" onclick="toggleFAQ(this)">
+    Como criar metas?
+    <div class="answer">Vá para a página de Metas e clique em "Adicionar nova meta".</div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Contato Rápido</h2>
+  <p>Envie uma mensagem para nossa equipe de suporte:</p>
+  <input type="text" placeholder="Seu nome" id="nome">
+  <input type="email" placeholder="Seu e-mail" id="email">
+  <textarea placeholder="Mensagem" id="mensagem"></textarea>
+  <button class="btn" onclick="enviarMensagem()">Enviar</button>
+  <small style="opacity:0.7;">As mensagens são simuladas e não serão enviadas.</small>
+</div>
+
+<script>
+// FAQ toggle
+function toggleFAQ(el){
+  const ans = el.querySelector('.answer');
+  ans.style.display = ans.style.display === 'block' ? 'none' : 'block';
+}
+
+// Simula status do suporte
+const statusEl = document.getElementById('status');
+function atualizarStatus(){
+  const estados = ['Ocupado','Ocupado','Ocupado'];
+  statusEl.textContent = estados[Math.floor(Math.random()*estados.length)];
+  statusEl.style.animation = 'neonPulse 2.5s infinite';
+}
+atualizarStatus();
+setInterval(atualizarStatus,5000);
+
+// Simula envio de mensagem
+function enviarMensagem(){
+  const nome = document.getElementById('nome').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const msg = document.getElementById('mensagem').value.trim();
+  if(!nome || !email || !msg){ alert('Preencha todos os campos'); return; }
+  alert(`Obrigado ${nome}! Sua mensagem foi recebida (simulação).`);
+  document.getElementById('nome').value='';
+  document.getElementById('email').value='';
+  document.getElementById('mensagem').value='';
+}
+
+// Botão voltar
+function voltar(){
+  window.location.href="index3.html"; // substitua pelo link da página principal
+}
+</script>
+
+</body>
+</html>

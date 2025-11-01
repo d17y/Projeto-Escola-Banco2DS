@@ -4,6 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Gastos - First Bank</title>
+
+<!-- Fonte e Chart.js -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
   body {
@@ -15,12 +20,14 @@
     align-items:center;
     padding:20px;
   }
+
   h1 {
     color:#00ff88;
     margin:20px 0;
     text-shadow:0 0 15px #00ffaa;
     text-align:center;
   }
+
   .back-btn {
     background:none;
     border:1px solid rgba(0,255,136,0.3);
@@ -32,7 +39,10 @@
     text-shadow:0 0 5px #00ff88;
     transition:0.3s;
   }
-  .back-btn:hover { background: rgba(0,255,136,0.1); box-shadow:0 0 15px #00ff88; }
+  .back-btn:hover {
+    background: rgba(0,255,136,0.1);
+    box-shadow:0 0 15px #00ff88;
+  }
 
   #gastosContainer {
     display:flex;
@@ -40,7 +50,9 @@
     gap:15px;
     width:100%;
     max-width:420px;
-    margin-bottom:40px;
+    margin-bottom:20px;
+    transition: max-height 0.4s ease;
+    overflow:hidden;
   }
 
   .gasto {
@@ -49,58 +61,180 @@
     align-items:center;
     padding:15px 20px;
     border-radius:15px;
-    
     border:2px solid;
     box-shadow:0 0 15px rgba(0,255,136,0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .gasto span {
-    font-size:0.95em;
-  }
-  .gasto .tipo-pix { border-color: #ff4c4c; color:#ff4c4c; }
-  .gasto .tipo-meta { border-color: #00ff88; color:#00ff88; }
 
+  .gasto:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(0,255,136,0.5);
+  }
+
+  .gasto span { font-size:0.95em; }
   .gasto .descricao { font-weight:600; }
   .gasto .valor { font-weight:600; }
   .gasto .data { font-size:0.75em; opacity:0.7; margin-left:10px; }
 
+  .tipo-pix { border-color: #ff4c4c; color:#ff4c4c; }
+  .tipo-meta { border-color: #00ff88; color:#00ff88; }
+
+  /* Botão mostrar mais */
+  .mostrar-btn {
+    background:none;
+    border:1px solid rgba(0,255,136,0.4);
+    color:#00ff88;
+    padding:8px 16px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:600;
+    text-shadow:0 0 5px #00ff88;
+    transition:0.3s;
+    margin-bottom:35px;
+  }
+  .mostrar-btn:hover {
+    background:rgba(0,255,136,0.1);
+    box-shadow:0 0 15px #00ff88;
+  }
+
+  /* Container do gráfico e legendas */
+  .grafico-container {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:wrap;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(0,255,136,0.3);
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 0 20px rgba(0,255,136,0.2);
+    width:100%;
+    max-width:420px;
+  }
+
+  .grafico-legenda {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .legenda-item {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.9em;
+  }
+
+  .legenda-cor {
+    width:15px;
+    height:15px;
+    border-radius:50%;
+  }
+
+  .cor-pix { background:#ff4c4c; box-shadow:0 0 8px #ff4c4c; }
+  .cor-meta { background:#00ff88; box-shadow:0 0 8px #00ff88; }
+
   @media(max-width:480px){
     .gasto { flex-direction:column; align-items:flex-start; padding:12px 15px; }
     .gasto .data { margin-left:0; margin-top:5px; }
+    .grafico-container { flex-direction:column; gap:20px; }
   }
 </style>
 </head>
 <body>
 
 <button class="back-btn" onclick="window.location.href='index3.html'">← Voltar</button>
-<h1>💸 Meus Gastos 💸</h1>
+
 
 <div id="gastosContainer"></div>
+<button class="mostrar-btn" id="mostrarMaisBtn" style="display:none;">Mostrar mais</button>
+
+<div class="grafico-container">
+  <canvas id="graficoGastos" width="150" height="150"></canvas>
+  <div class="grafico-legenda">
+    <div class="legenda-item"><div class="legenda-cor cor-pix"></div> PIX: <span id="porcPix">0%</span></div>
+    <div class="legenda-item"><div class="legenda-cor cor-meta"></div> Metas/Investimentos: <span id="porcMeta">0%</span></div>
+  </div>
+</div>
 
 <script>
-// Função para formatar BRL
 function formatBRL(n){
-  return n.toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
+  return n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 }
 
-// Pega todos os gastos do localStorage
 const gastos = JSON.parse(localStorage.getItem('gastos') || '[]');
 const container = document.getElementById('gastosContainer');
-
-// Ordena do mais recente
+const btnMostrar = document.getElementById('mostrarMaisBtn');
 gastos.sort((a,b)=> new Date(b.data) - new Date(a.data));
 
-// Cria cards
-gastos.forEach(gasto=>{
-  const div = document.createElement('div');
-  div.classList.add('gasto');
-  div.classList.add(gasto.tipo === 'pix' ? 'tipo-pix' : 'tipo-meta');
-  const date = new Date(gasto.data);
-  div.innerHTML = `
-    <span class="descricao">${gasto.descricao}</span>
-    <span class="valor">${formatBRL(gasto.valor)}</span>
-    <span class="data">${date.toLocaleDateString('pt-BR')} ${date.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span>
-  `;
-  container.appendChild(div);
+let mostrandoTudo = false;
+const limite = 2;
+
+function renderGastos(){
+  container.innerHTML = '';
+  const lista = mostrandoTudo ? gastos : gastos.slice(0, limite);
+
+  lista.forEach(gasto=>{
+    const div=document.createElement('div');
+    div.classList.add('gasto');
+    div.classList.add(gasto.tipo==='pix'?'tipo-pix':'tipo-meta');
+    const date=new Date(gasto.data);
+    div.innerHTML=`
+      <span class="descricao">${gasto.descricao}</span>
+      <span class="valor">${formatBRL(gasto.valor)}</span>
+      <span class="data">${date.toLocaleDateString('pt-BR')} ${date.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span>
+    `;
+    container.appendChild(div);
+  });
+
+  if (gastos.length > limite) btnMostrar.style.display = 'inline-block';
+  btnMostrar.textContent = mostrandoTudo ? 'Mostrar menos' : 'Mostrar mais';
+}
+
+btnMostrar.addEventListener('click', ()=>{
+  mostrandoTudo = !mostrandoTudo;
+  renderGastos();
+});
+
+// Inicializa lista
+renderGastos();
+
+// === GRÁFICO ===
+let totalPix = 0, totalMeta = 0;
+gastos.forEach(g=>{
+  if(g.tipo === 'pix') totalPix += g.valor;
+  else totalMeta += g.valor;
+});
+const total = totalPix + totalMeta;
+const porcPix = total ? ((totalPix/total)*100).toFixed(1) : 0;
+const porcMeta = total ? ((totalMeta/total)*100).toFixed(1) : 0;
+document.getElementById('porcPix').textContent = `${porcPix}%`;
+document.getElementById('porcMeta').textContent = `${porcMeta}%`;
+
+const ctx = document.getElementById('graficoGastos');
+new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    labels: ['PIX','Metas/Investimentos'],
+    datasets: [{
+      data: [totalPix,totalMeta],
+      backgroundColor: ['#ff4c4c','#00ff88'],
+      borderColor: '#001a12',
+      borderWidth: 2,
+    }]
+  },
+  options: {
+    cutout: '70%',
+    plugins: {
+      legend: { display:false },
+      tooltip: {
+        backgroundColor: '#001a12',
+        titleColor: '#00ff88',
+        bodyColor: '#fff'
+      }
+    }
+  }
 });
 </script>
 

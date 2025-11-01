@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parceria Claro - Educa Finance</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#000a0f;
+  --bg2:#001a22;
+  --neon:#00ff88;
+  --neon-accent:#00ffcc;
+  --card-radius:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;color:#e7fff2;}
+body{
+  background: linear-gradient(135deg,var(--bg1),var(--bg2));
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  padding:20px;
+  text-align:center;
+  overflow:hidden;
+}
+h1{
+  font-size:2rem;
+  color:var(--neon);
+  text-shadow:0 0 10px var(--neon);
+  margin-bottom:20px;
+}
+p{
+  font-size:1.2rem;
+  color:#00ffcc;
+  margin-bottom:40px;
+}
+.btn{
+  background: linear-gradient(90deg,var(--neon),var(--neon-accent));
+  border:none;
+  color:#001a12;
+  padding:12px 20px;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 0 12px rgba(0,255,136,0.18);
+  transition:0.3s;
+}
+.btn:hover{box-shadow:0 0 24px rgba(0,255,136,0.28);}
+.logo{
+  width:120px;
+  margin-bottom:30px;
+  filter:drop-shadow(0 0 8px var(--neon));
+  animation:neonPulse 1.5s infinite;
+}
+@keyframes neonPulse{
+  0%,100%{filter:drop-shadow(0 0 8px var(--neon));}
+  50%{filter:drop-shadow(0 0 20px var(--neon-accent));}
+}
+</style>
+</head>
+<body>
+
+<img src="claro.png" alt="Claro Logo" class="logo">
+<h1>Em parceria com a Claro</h1>
+<p>Você será redirecionado para o site oficial da Claro em alguns segundos.</p>
+<button class="btn" id="continuarBtn">Continuar Agora</button>
+
+<script>
+const redirectURL = "https://www.claro.com.br";
+
+// redireciona após 5 segundos
+setTimeout(() => {
+  window.location.href = redirectURL;
+}, 3000);
+
+// botão de redirecionamento imediato
+document.getElementById('continuarBtn').onclick = () => {
+  window.location.href = redirectURL;
+};
+</script>
+
+</body>
+</html>
