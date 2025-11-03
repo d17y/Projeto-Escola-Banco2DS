@@ -68,10 +68,33 @@ h1 { text-align:center; font-size:2em; margin:20px 0; color:#00ff88; text-shadow
 .no-meta { text-align:center; margin-top:80px; color:#00ffaa; font-size:1em; text-shadow:0 0 8px #00ffcc; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
 
-.adicionar { position:fixed; right:20px; bottom:20px; background:linear-gradient(135deg,#00ffaa,#00ffff); width:60px; height:60px; border-radius:50%; border:none; font-size:2em; cursor:pointer; box-shadow:0 0 25px #00ffaa; transition:0.3s; }
-.adicionar:hover { transform:scale(1.1); box-shadow:0 0 35px #00ffaa; }
+.adicionar {
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:linear-gradient(135deg,#00ffaa,#00ffff);
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  border:none;
+  font-size:2em;
+  cursor:pointer;
+  box-shadow:0 0 25px #00ffaa;
+  transition:0.3s;
+  z-index:9999; /* garante que o botão fique clicável em mobile */
+}
 
-.form-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center; visibility:hidden; opacity:0; transition:0.3s; }
+.form-overlay {
+  position: fixed;
+  top:0; left:0; right:0; bottom:0;
+  background: rgba(0,0,0,0.8);
+  display:flex; justify-content:center; align-items:center;
+  visibility:hidden; opacity:0; transition:0.3s;
+  z-index:10000; /* acima de tudo */
+}
+
+
+
 .form-overlay.active { visibility:visible; opacity:1; }
 .formulario { background: rgba(0,15,25,0.9); border:2px solid #00ffaa; border-radius:15px; padding:25px; width:320px; text-align:center; box-shadow:0 0 25px #00ffcc55; }
 .formulario input { width:90%; margin:8px 0; padding:10px; border:none; border-radius:10px; outline:none; background: rgba(255,255,255,0.1); color:#00ffcc; text-align:center; }
@@ -137,6 +160,8 @@ criarMeta.addEventListener('click', ()=>{
   document.querySelectorAll('.formulario input').forEach(i=>i.value='');
   noMetaMsg.style.display='none';
 });
+
+
 
 // ====== FUNÇÃO DE CRIAR CARD ======
 function criarCardMeta(nome,total,acumulado=0){
