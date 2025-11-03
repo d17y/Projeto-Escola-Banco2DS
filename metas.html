@@ -70,8 +70,9 @@ h1 { text-align:center; font-size:2em; margin:20px 0; color:#00ff88; text-shadow
 
 .adicionar {
   position:fixed;
-  right:20px;
+  left:50%;
   bottom:20px;
+  transform:translateX(-50%);
   background:linear-gradient(135deg,#00ffaa,#00ffff);
   width:60px;
   height:60px;
@@ -83,7 +84,7 @@ h1 { text-align:center; font-size:2em; margin:20px 0; color:#00ff88; text-shadow
   transition:0.3s;
   z-index:9999;
 }
-.adicionar:hover { transform:scale(1.1); box-shadow:0 0 35px #00ffaa; }
+.adicionar:hover { transform:translateX(-50%) scale(1.1); box-shadow:0 0 35px #00ffaa; }
 
 .form-overlay {
   position: fixed;
