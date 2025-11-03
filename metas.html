@@ -81,7 +81,13 @@ h1 { text-align:center; font-size:2em; margin:20px 0; color:#00ff88; text-shadow
   cursor:pointer;
   box-shadow:0 0 25px #00ffaa;
   transition:0.3s;
-  z-index:9999; /* garante que o botão fique clicável em mobile */
+  z-index:9999;
+  animation: pulseNeon 2s infinite;
+}
+
+@keyframes pulseNeon {
+  0%,100% { box-shadow:0 0 20px #00ffaa; transform:scale(1); }
+  50% { box-shadow:0 0 40px #00ffcc; transform:scale(1.08); }
 }
 
 .form-overlay {
@@ -90,15 +96,31 @@ h1 { text-align:center; font-size:2em; margin:20px 0; color:#00ff88; text-shadow
   background: rgba(0,0,0,0.8);
   display:flex; justify-content:center; align-items:center;
   visibility:hidden; opacity:0; transition:0.3s;
-  z-index:10000; /* acima de tudo */
+  z-index:10000;
 }
-
-
-
 .form-overlay.active { visibility:visible; opacity:1; }
-.formulario { background: rgba(0,15,25,0.9); border:2px solid #00ffaa; border-radius:15px; padding:25px; width:320px; text-align:center; box-shadow:0 0 25px #00ffcc55; }
-.formulario input { width:90%; margin:8px 0; padding:10px; border:none; border-radius:10px; outline:none; background: rgba(255,255,255,0.1); color:#00ffcc; text-align:center; }
-.formulario button { margin-top:10px; padding:10px 15px; border:none; border-radius:10px; background:linear-gradient(90deg,#00ffaa,#00ffff); cursor:pointer; font-weight:bold; color:#000; }
+
+.formulario {
+  background: rgba(0,15,25,0.9);
+  border:2px solid #00ffaa;
+  border-radius:15px;
+  padding:25px;
+  width:320px;
+  text-align:center;
+  box-shadow:0 0 25px #00ffcc55;
+}
+.formulario input {
+  width:90%; margin:8px 0; padding:10px;
+  border:none; border-radius:10px; outline:none;
+  background: rgba(255,255,255,0.1);
+  color:#00ffcc; text-align:center;
+}
+.formulario button {
+  margin-top:10px; padding:10px 15px;
+  border:none; border-radius:10px;
+  background:linear-gradient(90deg,#00ffaa,#00ffff);
+  cursor:pointer; font-weight:bold; color:#000;
+}
 
 @keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
 </style>
@@ -146,8 +168,16 @@ metas.forEach(meta => criarCardMeta(meta.nome, meta.total, meta.acumulado));
 if(metas.length>0) noMetaMsg.style.display='none';
 
 // ====== EVENTOS ======
-btnAdicionar.addEventListener('click', ()=>overlayForm.classList.add('active'));
-overlayForm.addEventListener('click', e => { if(e.target===overlayForm) overlayForm.classList.remove('active'); });
+function abrirFormulario() {
+  overlayForm.classList.add('active');
+}
+btnAdicionar.addEventListener('click', abrirFormulario);
+btnAdicionar.addEventListener('touchstart', abrirFormulario);
+
+overlayForm.addEventListener('click', e => {
+  if(e.target === overlayForm) overlayForm.classList.remove('active');
+});
+
 criarMeta.addEventListener('click', ()=>{
   const nome=document.getElementById('nomeMeta').value;
   const total=parseFloat(document.getElementById('valorTotal').value);
@@ -160,8 +190,6 @@ criarMeta.addEventListener('click', ()=>{
   document.querySelectorAll('.formulario input').forEach(i=>i.value='');
   noMetaMsg.style.display='none';
 });
-
-
 
 // ====== FUNÇÃO DE CRIAR CARD ======
 function criarCardMeta(nome,total,acumulado=0){
@@ -186,8 +214,6 @@ function criarCardMeta(nome,total,acumulado=0){
     const p=Math.min((acumulado/total)*100,100);
     circle.style.background=`conic-gradient(#00ff88 ${p}%, rgba(0,255,136,0.2) ${p}%)`;
     percent.textContent=Math.floor(p)+'%';
-    
-    // mensagens motivacionais
     if(p==0) mensagem.textContent="Vamos lá! Você consegue!";
     else if(p<50) mensagem.textContent="Faltando pouco, continue!";
     else if(p<100) mensagem.textContent="Quase lá, não desista!";
