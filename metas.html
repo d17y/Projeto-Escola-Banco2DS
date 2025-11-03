@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Educa+ Metas Futuristas</title>
 <style>
 * {margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif;}
@@ -66,60 +66,18 @@ h1 { text-align:center; font-size:2em; margin:20px 0; color:#00ff88; text-shadow
 .btn-deposito:hover { transform:scale(1.05); box-shadow:0 0 15px #00ffaa; }
 
 .no-meta { text-align:center; margin-top:80px; color:#00ffaa; font-size:1em; text-shadow:0 0 8px #00ffcc; animation: pulse 2s infinite; }
+
 @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
-
-.adicionar {
-  position:fixed;
-  left:50%;
-  bottom:20px;
-  transform:translateX(-50%);
-  background:linear-gradient(135deg,#00ffaa,#00ffff);
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  border:none;
-  font-size:2em;
-  cursor:pointer;
-  box-shadow:0 0 25px #00ffaa;
-  transition:0.3s;
-  z-index:9999;
-}
-.adicionar:hover { transform:translateX(-50%) scale(1.1); box-shadow:0 0 35px #00ffaa; }
-
-.form-overlay {
-  position: fixed;
-  top:0; left:0; right:0; bottom:0;
-  background: rgba(0,0,0,0.8);
-  display:flex; justify-content:center; align-items:center;
-  visibility:hidden; opacity:0; transition:0.3s;
-  z-index:10000;
-}
-.form-overlay.active { visibility:visible; opacity:1; }
-.formulario { background: rgba(0,15,25,0.9); border:2px solid #00ffaa; border-radius:15px; padding:25px; width:320px; text-align:center; box-shadow:0 0 25px #00ffcc55; }
-.formulario input { width:90%; margin:8px 0; padding:10px; border:none; border-radius:10px; outline:none; background: rgba(255,255,255,0.1); color:#00ffcc; text-align:center; }
-.formulario button { margin-top:10px; padding:10px 15px; border:none; border-radius:10px; background:linear-gradient(90deg,#00ffaa,#00ffff); cursor:pointer; font-weight:bold; color:#000; }
-
 @keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
 </style>
 </head>
 <body>
 
 <button class="back-btn" onclick="window.location.href='index3.html'">← Voltar</button>
-<h1>⚡ Metas⚡</h1>
+<h1>⚡ Metas ⚡</h1>
 
 <div id="metasContainer"></div>
-<div id="noMetaMsg" class="no-meta">Parece que você não tem metas...</div>
-
-<button class="adicionar" id="btnAdicionar">+</button>
-
-<div class="form-overlay" id="overlayForm">
-  <div class="formulario">
-    <h2>Nova Meta</h2>
-    <input type="text" id="nomeMeta" placeholder="Nome da meta">
-    <input type="number" id="valorTotal" placeholder="Valor total (R$)">
-    <button id="criarMeta">Criar</button>
-  </div>
-</div>
+<div id="noMetaMsg" class="no-meta" style="display:none;">Parece que você não tem metas...</div>
 
 <script>
 // ====== SALDO OCULTO ======
@@ -128,42 +86,13 @@ let saldoValor = parseFloat(JSON.parse(localStorage.getItem('saldo_valor')));
 
 // ====== ELEMENTOS ======
 const metasContainer = document.getElementById('metasContainer');
-const btnAdicionar = document.getElementById('btnAdicionar');
-const overlayForm = document.getElementById('overlayForm');
-const criarMeta = document.getElementById('criarMeta');
-const noMetaMsg = document.getElementById('noMetaMsg');
 
-// ====== LOCALSTORAGE ======
-if (!localStorage.getItem('metas')) localStorage.setItem('metas', JSON.stringify([]));
-if (!localStorage.getItem('gastos')) localStorage.setItem('gastos', JSON.stringify([]));
-
-let metas = JSON.parse(localStorage.getItem('metas'));
-let gastos = JSON.parse(localStorage.getItem('gastos'));
-
-// ====== CARREGAR METAS ======
-metas.forEach(meta => criarCardMeta(meta.nome, meta.total, meta.acumulado));
-if(metas.length>0) noMetaMsg.style.display='none';
-
-// ====== EVENTOS ======
-function abrirFormulario() { overlayForm.classList.add('active'); }
-btnAdicionar.addEventListener('click', abrirFormulario);
-btnAdicionar.addEventListener('touchend', e => { e.preventDefault(); abrirFormulario(); });
-
-overlayForm.addEventListener('click', e => { if(e.target===overlayForm) overlayForm.classList.remove('active'); });
-overlayForm.addEventListener('touchend', e => { if(e.target===overlayForm) overlayForm.classList.remove('active'); });
-
-criarMeta.addEventListener('click', ()=>{
-  const nome=document.getElementById('nomeMeta').value.trim();
-  const total=parseFloat(document.getElementById('valorTotal').value);
-  if(!nome || !total) return;
-  const nova={nome,total,acumulado:0};
-  metas.push(nova);
-  localStorage.setItem('metas',JSON.stringify(metas));
-  criarCardMeta(nome,total,0);
-  overlayForm.classList.remove('active');
-  document.querySelectorAll('.formulario input').forEach(i=>i.value='');
-  noMetaMsg.style.display='none';
-});
+// ====== METAS PRÉ-DEFINIDAS ======
+let metas = [
+  {nome:"Economizar para Notebook", total:2500, acumulado:800},
+  {nome:"Férias em SP", total:1500, acumulado:400},
+  {nome:"Curso de Programação", total:1000, acumulado:200}
+];
 
 // ====== FUNÇÃO DE CRIAR CARD ======
 function criarCardMeta(nome,total,acumulado=0){
@@ -202,16 +131,15 @@ function criarCardMeta(nome,total,acumulado=0){
     acumulado+=valor;
     saldoValor-=valor;
     localStorage.setItem('saldo_valor',JSON.stringify(saldoValor));
-    const index=metas.findIndex(m=>m.nome===nome&&m.total===total);
-    if(index>=0){metas[index].acumulado=acumulado; localStorage.setItem('metas',JSON.stringify(metas));}
-    const novoGasto={tipo:'meta',descricao:`Depósito na meta "${nome}"`,valor:valor,data:new Date().toISOString()};
-    gastos.push(novoGasto);
-    localStorage.setItem('gastos',JSON.stringify(gastos));
     atualizar();
   });
 
   metasContainer.appendChild(div);
 }
+
+// ====== CARREGAR METAS ======
+metas.forEach(meta=>criarCardMeta(meta.nome,meta.total,meta.acumulado));
 </script>
+
 </body>
 </html>
